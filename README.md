@@ -1,5 +1,7 @@
 # الراوي فواز الغسلان — audio archive
 
+[![GitHub](https://img.shields.io/badge/GitHub-iTzFaisal%2Falrawie-181717?logo=github)](https://github.com/iTzFaisal/alrawie)
+
 A preservation archive of **فواز الغسلان** recordings recovered from the
 surviving mirror channel **صدى نجد دوت كوم** (`@alraawy_2`).
 
@@ -15,8 +17,8 @@ Ghasslan part of that catalog from third-party reuploads and keeps it as
 ## Quick start
 
 ```bash
-git clone https://github.com/<your-user>/youtube-alrawie8.git
-cd youtube-alrawie8
+git clone https://github.com/iTzFaisal/alrawie.git
+cd alrawie
 
 ./download.sh                # 207 main audio files
 ./download_supplements.sh    # 4 gap-filler audio files
@@ -55,20 +57,20 @@ script skips files that already exist, so downloads are resumable.
 
 Each audio file is placed in the folder for its series:
 
-| Folder | Files |
-|---|---:|
-| `الموسوعة الشعرية` | 57 |
-| `نوادر من التراث` | 49 |
-| `جواهر الأمثال الشعبية` | 38 |
-| `عاشق ومعشوق` | 23 |
-| `ضحايا العشق` | 17 |
-| `القصائد المتداخلة` | 10 |
-| `فنجال الكيف` | 7 |
-| `مفاخر العرب` | 1 |
-| `موسوعة التاريخ والأدب` | 1 |
-| `نوادر شعرية` | 1 |
-| `أخرى` | 3 |
-| `مكملات` | 4 |
+| Folder                  | Files |
+| ----------------------- | ----: |
+| `الموسوعة الشعرية`      |    57 |
+| `نوادر من التراث`       |    49 |
+| `جواهر الأمثال الشعبية` |    38 |
+| `عاشق ومعشوق`           |    23 |
+| `ضحايا العشق`           |    17 |
+| `القصائد المتداخلة`     |    10 |
+| `فنجال الكيف`           |     7 |
+| `مفاخر العرب`           |     1 |
+| `موسوعة التاريخ والأدب` |     1 |
+| `نوادر شعرية`           |     1 |
+| `أخرى`                  |     3 |
+| `مكملات`                |     4 |
 
 `أخرى` is the catch-all for the few uploads whose titles do not name a series.
 The `series` value is stored in `catalog/ghasslan_mirrors.csv`, so the
@@ -172,10 +174,10 @@ folders), prints coverage, total size, and runtime, and writes
 
 Only two files are needed to rebuild the archive:
 
-| File                           | Used by                                | Contents                                                            |
-| ------------------------------ | -------------------------------------- | ------------------------------------------------------------------- |
-| `catalog/ghasslan_mirrors.csv` | `download.sh`, `organize.py`, `verify.py` | 207 rows: `video_id,title,series,duration_seconds,channel,url` |
-| `catalog/supplements.csv`      | `download_supplements.sh`, `verify.py` | 4 rows: `video_id,title,replaces_original,duration_seconds,channel` |
+| File                           | Used by                                   | Contents                                                            |
+| ------------------------------ | ----------------------------------------- | ------------------------------------------------------------------- |
+| `catalog/ghasslan_mirrors.csv` | `download.sh`, `organize.py`, `verify.py` | 207 rows: `video_id,title,series,duration_seconds,channel,url`      |
+| `catalog/supplements.csv`      | `download_supplements.sh`, `verify.py`    | 4 rows: `video_id,title,replaces_original,duration_seconds,channel` |
 
 There is **no overlap** between the two manifests. All 207 channel uploads,
 including `hR-LkMcljDk`, live in `audios/`; the 4 supplements are separate
