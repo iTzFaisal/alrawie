@@ -75,7 +75,9 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
   enclosures point at `releases/download/audio-<slug>/<video-id>.m4a`. Renaming
   the repo, the slug, or an asset, or deleting and re-uploading one, silently
   breaks every subscriber. Add new episodes at the end of a season instead of
-  renumbering.
+  renumbering. The Apple Podcasts IDs (`6835240326` main, `6835240746`
+  cassettes) are bound to these feed URLs and would have to be resubmitted if
+  the URL changed.
 - `docs/` is generated: edit `podcast/build_feed.py`, not the XML or HTML.
   `BASE_DATE` is fixed on purpose so a rebuild produces an empty diff; changing
   it republishes every episode with a new date.

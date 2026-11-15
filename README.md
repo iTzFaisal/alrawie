@@ -84,9 +84,18 @@ URL per episode and cannot open a zip.
   are numbered `القصائد المتداخلة — القسم 1…7`; two `مساجله شعريه` uploads get
   the same suffix. Renaming the catalog row and rebuilding renames the episode.
 
-To listen, paste a feed URL into Overcast, Pocket Casts, AntennaPod, Castro or
-Podverse ("Add by URL"). To appear in a directory, submit the same URL once to
-[Podcasts Connect](https://podcastsconnect.apple.com/); nothing else is needed.
+Both shows are listed in Apple Podcasts:
+
+- أرشيف الراوي فواز الغسلان — <https://podcasts.apple.com/us/podcast/id6835240326>
+- الكاسيتات الكاملة — <https://podcasts.apple.com/us/podcast/id6835240746>
+
+The landing page also links Podcast Addict, Overcast and Pocket Casts. The
+Podcast Addict button uses `podcastaddict.com/feed/<encoded feed>`, which starts
+working once the feed is indexed there — submit it once at
+<https://podcastaddict.com/submit> (indexing can take up to 24 hours).
+
+To listen without a directory, paste a feed URL into any app that supports
+"Add by URL".
 
 ```bash
 python3 podcast/build_feed.py        # regenerate docs/feed.xml and the landing page

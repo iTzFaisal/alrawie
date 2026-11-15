@@ -111,6 +111,7 @@ class Show:
     keywords: str
     cover: str
     feed_rel: str
+    apple: str
     seasons: list[tuple[str, str]] = field(default_factory=list)
     episodes: list[Episode] = field(default_factory=list)
 
@@ -266,6 +267,7 @@ def build_shows() -> list[Show]:
         keywords="فواز الغسلان,شعر نبطي,تراث,قصص,أمثال,نجد,العرب",
         cover=MAIN_COVER,
         feed_rel="feed.xml",
+        apple="https://podcasts.apple.com/us/podcast/أرشيف-الراوي-فواز-الغسلان/id6835240326",
         seasons=SEASONS,
     )
     cassette_show = Show(
@@ -285,6 +287,7 @@ def build_shows() -> list[Show]:
         keywords="فواز الغسلان,كاسيت,أشرطة,شعر نبطي,تراث",
         cover=CASSETTE_COVER,
         feed_rel="kasayet/feed.xml",
+        apple="https://podcasts.apple.com/us/podcast/فواز-الغسلان-—-الكاسيتات-الكاملة/id6835240746",
         seasons=[(CASSETTES, CASSETTE_SLUG)],
     )
 
@@ -463,6 +466,12 @@ PAGE = """<!doctype html>
     padding: 9px 14px; text-decoration: none; white-space: nowrap;
   }}
   button.secondary, .button.secondary {{ background: transparent; color: var(--gold); }}
+  .button.apple {{ background: #111; border-color: #111; color: #fff; display: inline-flex; align-items: center; gap: 8px; }}
+  .button.apple::before {{
+    content: ""; width: 13px; height: 15px; background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath d='M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z'/%3E%3C/svg%3E") no-repeat center / contain;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath d='M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z'/%3E%3C/svg%3E") no-repeat center / contain;
+  }}
   .meta {{ font-size: 13px; color: var(--muted); }}
   ol {{ padding-inline-start: 20px; color: var(--muted); font-size: 15px; }}
   ol li {{ margin: 6px 0; }}
@@ -485,8 +494,8 @@ PAGE = """<!doctype html>
   <h2 style="margin:44px 0 10px;font-size:20px">كيف تشترك؟</h2>
   <ol>
     <li>انسخ رابط الاشتراك (Feed URL) من البطاقة أعلاه.</li>
-    <li>في تطبيق البودكاست اختر «إضافة بودكاست عبر رابط» أو «Add by URL» والصق الرابط: Overcast، Pocket Casts، AntennaPod، Castro، Podverse…</li>
-    <li>للاستظهار في دليل Apple Podcasts أو غيره، أرسل نفس الرابط مرة واحدة إلى <a href="https://podcastsconnect.apple.com/">Podcasts Connect</a>.</li>
+    <li>في تطبيق البودكاست اختر «إضافة بودكاست عبر رابط» أو «Add by URL» والصق الرابط: Podcast Addict، Overcast، Pocket Casts، AntennaPod، Castro، Podverse…</li>
+    <li>على iPhone افتح <a href="{apple}">Apple Podcasts</a> مباشرة، أو ابحث في التطبيق عن «أرشيف الراوي فواز الغسلان».</li>
     <li>تحميل الملفات كاملةً (بدون بودكاست): <a href="https://github.com/{repo}/releases/latest">صفحة الإصدارات</a>.</li>
   </ol>
 
@@ -520,6 +529,8 @@ def show_card(show: Show) -> str:
         <button type="button" onclick="copyFeed('{show.key}', this)">انسخ الرابط</button>
       </div>
       <div class="feed">
+        <a class="button apple" href="{quote(show.apple, safe=":/")}">Apple Podcasts</a>
+        <a class="button secondary" href="https://podcastaddict.com/feed/{quote(show.feed_url, safe="")}">Podcast Addict</a>
         <a class="button secondary" href="overcast://x-callback-url/add?url={quote(show.feed_url, safe="")}">Overcast</a>
         <a class="button secondary" href="pocketcasts://subscribe/{show.feed_url}">Pocket Casts</a>
         <a class="button secondary" href="{esc(show.feed_url)}">RSS</a>
@@ -534,6 +545,7 @@ def landing(shows: list[Show]) -> str:
         tagline="قصص وقصائد وأمثال من التراث العربي، بصوت الراوي فواز الغسلان.",
         cards=cards,
         repo=REPO,
+        apple=quote(shows[0].apple, safe=":/"),
         english="Arabic poetry and folk tales podcast",
     ).replace(
         "</body>",
