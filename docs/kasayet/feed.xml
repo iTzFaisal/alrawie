@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+     xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+     xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>فواز الغسلان — الكاسيتات الكاملة</title>
+    <link>https://itzfaisal.github.io/alrawie/</link>
+    <atom:link href="https://itzfaisal.github.io/alrawie/kasayet/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>الأشرطة الأصلية الكاملة التي اقتُطعت منها حلقات أرشيف الراوي فواز الغسلان: اثنا عشر كاسيتًا، نحو أربع عشرة ساعة ونصف. لمن يفضّل الاستماع على ترتيب الشريط كما صدر.</description>
+    <language>ar</language>
+    <copyright>الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</copyright>
+    <lastBuildDate>Sun, 15 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <generator>podcast/build_feed.py</generator>
+    <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    <itunes:summary>اثنا عشر كاسيتًا كاملًا لتسجيلات الراوي فواز الغسلان، دون تقطيع، على ترتيب الشريط الأصلي.</itunes:summary>
+    <itunes:subtitle>الأشرطة الأصلية كاملة</itunes:subtitle>
+    <itunes:keywords>فواز الغسلان,كاسيت,أشرطة,شعر نبطي,تراث</itunes:keywords>
+    <itunes:owner>
+      <itunes:name>أرشيف فواز الغسلان</itunes:name>
+      <itunes:email>iTzFaisal@users.noreply.github.com</itunes:email>
+    </itunes:owner>
+    <itunes:image href="https://itzfaisal.github.io/alrawie/kasayet/cover.jpg"/>
+    <image>
+      <url>https://itzfaisal.github.io/alrawie/kasayet/cover.jpg</url>
+      <title>فواز الغسلان — الكاسيتات الكاملة</title>
+      <link>https://itzfaisal.github.io/alrawie/</link>
+    </image>
+    <itunes:category text="Arts"><itunes:category text="Books"/></itunes:category>
+    <itunes:category text="Society &amp; Culture"/>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:type>episodic</itunes:type>
+    <item>
+      <title>كاسيت نوادر من التراث الجزء الاول</title>
+      <description>من سلسلة «كاسيت» — الأشرطة الأصلية كاملة.
+المدة: 1:11:23
+العنوان الأصلي: الراوي فواز الغسلان | كاسيت نوادر من التراث الجزء الاول
+المصدر: https://www.youtube.com/watch?v=Bb60r2PNAZU
+الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</description>
+      <link>https://www.youtube.com/watch?v=Bb60r2PNAZU</link>
+      <guid isPermaLink="false">Bb60r2PNAZU</guid>
+      <pubDate>Sun, 15 Nov 2026 00:00:00 +0000</pubDate>
+      <enclosure url="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/Bb60r2PNAZU.m4a" length="69264131" type="audio/x-m4a"/>
+      <itunes:duration>1:11:23</itunes:duration>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>1</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    </item>
+    <item>
+      <title>كاسيت الموسوعة الشعرية الجزء الثاني كامل</title>
+      <description>من سلسلة «كاسيت» — الأشرطة الأصلية كاملة.
+المدة: 1:11:41
+العنوان الأصلي: الراوي فواز الغسلان | كاسيت الموسوعة الشعرية الجزء الثاني كامل
+المصدر: https://www.youtube.com/watch?v=A5Hkwd30Gm8
+الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</description>
+      <link>https://www.youtube.com/watch?v=A5Hkwd30Gm8</link>
+      <guid isPermaLink="false">A5Hkwd30Gm8</guid>
+      <pubDate>Sat, 14 Nov 2026 23:54:00 +0000</pubDate>
+      <enclosure url="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/A5Hkwd30Gm8.m4a" length="69555158" type="audio/x-m4a"/>
+      <itunes:duration>1:11:41</itunes:duration>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>2</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    </item>
+    <item>
+      <title>كاسيت القصائد المتداخلة كامل</title>
+      <description>من سلسلة «كاسيت» — الأشرطة الأصلية كاملة.
+المدة: 1:17:23
+العنوان الأصلي: الراوي فواز الغسلان | كاسيت القصائد المتداخلة كامل
+المصدر: https://www.youtube.com/watch?v=BD5fjE1jRdw
+الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</description>
+      <link>https://www.youtube.com/watch?v=BD5fjE1jRdw</link>
+      <guid isPermaLink="false">BD5fjE1jRdw</guid>
+      <pubDate>Sat, 14 Nov 2026 23:48:00 +0000</pubDate>
+      <enclosure url="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/BD5fjE1jRdw.m4a" length="75086773" type="audio/x-m4a"/>
+      <itunes:duration>1:17:23</itunes:duration>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>3</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    </item>
+    <item>
+      <title>كاسيت ضحايا العشق كامل</title>
+      <description>من سلسلة «كاسيت» — الأشرطة الأصلية كاملة.
+المدة: 1:31:31
+العنوان الأصلي: الراوي فواز الغسلان  | كاسيت ضحايا العشق كامل
+المصدر: https://www.youtube.com/watch?v=pLi4M0r0lMM
+الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</description>
+      <link>https://www.youtube.com/watch?v=pLi4M0r0lMM</link>
+      <guid isPermaLink="false">pLi4M0r0lMM</guid>
+      <pubDate>Sat, 14 Nov 2026 23:42:00 +0000</pubDate>
+      <enclosure url="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/pLi4M0r0lMM.m4a" length="88795588" type="audio/x-m4a"/>
+      <itunes:duration>1:31:31</itunes:duration>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>4</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    </item>
+    <item>
+      <title>كاسيت جواهر الأمثال الشعبية كامل</title>
+      <description>من سلسلة «كاسيت» — الأشرطة الأصلية كاملة.
+المدة: 1:52:55
+العنوان الأصلي: الراوي فواز الغسلان | كاسيت جواهر الأمثال الشعبية كامل
+المصدر: https://www.youtube.com/watch?v=v_sSYqNpaD4
+الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</description>
+      <link>https://www.youtube.com/watch?v=v_sSYqNpaD4</link>
+      <guid isPermaLink="false">v_sSYqNpaD4</guid>
+      <pubDate>Sat, 14 Nov 2026 23:36:00 +0000</pubDate>
+      <enclosure url="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/v_sSYqNpaD4.m4a" length="109562247" type="audio/x-m4a"/>
+      <itunes:duration>1:52:55</itunes:duration>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>5</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    </item>
+    <item>
+      <title>كاسيت الموسوعة الشعرية الجزء الاول كامل</title>
+      <description>من سلسلة «كاسيت» — الأشرطة الأصلية كاملة.
+المدة: 1:01:03
+العنوان الأصلي: الراوي فواز الغسلان | كاسيت الموسوعة الشعرية الجزء الاول كامل
+المصدر: https://www.youtube.com/watch?v=pbv0_jlFVfo
+الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</description>
+      <link>https://www.youtube.com/watch?v=pbv0_jlFVfo</link>
+      <guid isPermaLink="false">pbv0_jlFVfo</guid>
+      <pubDate>Sat, 14 Nov 2026 23:30:00 +0000</pubDate>
+      <enclosure url="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/pbv0_jlFVfo.m4a" length="59226265" type="audio/x-m4a"/>
+      <itunes:duration>1:01:03</itunes:duration>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>6</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    </item>
+    <item>
+      <title>كاسيت نوادر من التراث الجزء الثاني والأخير</title>
+      <description>من سلسلة «كاسيت» — الأشرطة الأصلية كاملة.
+المدة: 54:30
+العنوان الأصلي: الراوي فواز الغسلان | كاسيت نوادر من التراث الجزء الثاني والأخير
+المصدر: https://www.youtube.com/watch?v=xEqTgiZUzhw
+الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</description>
+      <link>https://www.youtube.com/watch?v=xEqTgiZUzhw</link>
+      <guid isPermaLink="false">xEqTgiZUzhw</guid>
+      <pubDate>Sat, 14 Nov 2026 23:24:00 +0000</pubDate>
+      <enclosure url="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/xEqTgiZUzhw.m4a" length="52873897" type="audio/x-m4a"/>
+      <itunes:duration>54:30</itunes:duration>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>7</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    </item>
+    <item>
+      <title>كاسيت مفاخر العرب</title>
+      <description>من سلسلة «كاسيت» — الأشرطة الأصلية كاملة.
+المدة: 1:09:23
+العنوان الأصلي: الراوي فواز الغسلان  | كاسيت مفاخر العرب
+المصدر: https://www.youtube.com/watch?v=M_U6hLY36Mw
+الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</description>
+      <link>https://www.youtube.com/watch?v=M_U6hLY36Mw</link>
+      <guid isPermaLink="false">M_U6hLY36Mw</guid>
+      <pubDate>Sat, 14 Nov 2026 23:18:00 +0000</pubDate>
+      <enclosure url="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/M_U6hLY36Mw.m4a" length="67311990" type="audio/x-m4a"/>
+      <itunes:duration>1:09:23</itunes:duration>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>8</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    </item>
+    <item>
+      <title>كاسيت عاشق ومعشوق كامل</title>
+      <description>من سلسلة «كاسيت» — الأشرطة الأصلية كاملة.
+المدة: 59:19
+العنوان الأصلي: الراوي فواز الغسلان | كاسيت عاشق ومعشوق كامل
+المصدر: https://www.youtube.com/watch?v=yC3cGDreaTc
+الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</description>
+      <link>https://www.youtube.com/watch?v=yC3cGDreaTc</link>
+      <guid isPermaLink="false">yC3cGDreaTc</guid>
+      <pubDate>Sat, 14 Nov 2026 23:12:00 +0000</pubDate>
+      <enclosure url="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/yC3cGDreaTc.m4a" length="57553806" type="audio/x-m4a"/>
+      <itunes:duration>59:19</itunes:duration>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>9</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    </item>
+    <item>
+      <title>كاسيت الموسوعة الشعرية الجزء الثالث والأخير</title>
+      <description>من سلسلة «كاسيت» — الأشرطة الأصلية كاملة.
+المدة: 1:11:24
+العنوان الأصلي: الراوي فواز الغسلان | كاسيت الموسوعة الشعرية الجزء الثالث والأخير
+المصدر: https://www.youtube.com/watch?v=Vz6P4hOoNx8
+الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</description>
+      <link>https://www.youtube.com/watch?v=Vz6P4hOoNx8</link>
+      <guid isPermaLink="false">Vz6P4hOoNx8</guid>
+      <pubDate>Sat, 14 Nov 2026 23:06:00 +0000</pubDate>
+      <enclosure url="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/Vz6P4hOoNx8.m4a" length="69275381" type="audio/x-m4a"/>
+      <itunes:duration>1:11:24</itunes:duration>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>10</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    </item>
+    <item>
+      <title>كاسيت القهوة وقوانينها عند العرب كامل</title>
+      <description>من سلسلة «كاسيت» — الأشرطة الأصلية كاملة.
+المدة: 1:23:13
+العنوان الأصلي: الراوي فواز الغسلان | كاسيت القهوة وقوانينها عند العرب كامل
+المصدر: https://www.youtube.com/watch?v=neLdp1lP4U4
+الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</description>
+      <link>https://www.youtube.com/watch?v=neLdp1lP4U4</link>
+      <guid isPermaLink="false">neLdp1lP4U4</guid>
+      <pubDate>Sat, 14 Nov 2026 23:00:00 +0000</pubDate>
+      <enclosure url="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/neLdp1lP4U4.m4a" length="80733572" type="audio/x-m4a"/>
+      <itunes:duration>1:23:13</itunes:duration>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>11</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    </item>
+    <item>
+      <title>كاسيت نوادر شعرية كامل</title>
+      <description>من سلسلة «كاسيت» — الأشرطة الأصلية كاملة.
+المدة: 44:38
+العنوان الأصلي: الراوي فواز الغسلان | كاسيت نوادر شعرية كامل
+المصدر: https://www.youtube.com/watch?v=9kW5ihGdNos
+الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.</description>
+      <link>https://www.youtube.com/watch?v=9kW5ihGdNos</link>
+      <guid isPermaLink="false">9kW5ihGdNos</guid>
+      <pubDate>Sat, 14 Nov 2026 22:54:00 +0000</pubDate>
+      <enclosure url="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/9kW5ihGdNos.m4a" length="43297404" type="audio/x-m4a"/>
+      <itunes:duration>44:38</itunes:duration>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>12</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:author>فواز الغسلان — الكاسيتات الكاملة</itunes:author>
+    </item>
+  </channel>
+</rss>

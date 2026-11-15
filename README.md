@@ -2,6 +2,7 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-iTzFaisal%2Falrawie-181717?logo=github)](https://github.com/iTzFaisal/alrawie)
 [![Download](https://img.shields.io/badge/Download-GitHub%20Releases-2ea44f?logo=github)](https://github.com/iTzFaisal/alrawie/releases/latest)
+[![Podcast](https://img.shields.io/badge/Podcast-RSS%20feed-a8791f?logo=rss)](https://itzfaisal.github.io/alrawie/feed.xml)
 
 A preservation archive of **فواز الغسلان** recordings recovered from the
 surviving mirror channel **صدى نجد دوت كوم** (`@alraawy_2`).
@@ -59,6 +60,47 @@ Asset names are Latin slugs because GitHub strips non-ASCII characters from
 release filenames. Each zip keeps the original Arabic folder as its top level,
 so extracting under `audios/` reproduces this repository's layout exactly; the
 [folder table](#series-folders) maps every slug to its series.
+
+## Podcast
+
+The archive is also published as two podcast feeds, served from GitHub Pages.
+Every episode is its own release asset, because podcast apps need one stable
+URL per episode and cannot open a zip.
+
+| Show | Episodes | Runtime | Subscribe |
+| --- | ---: | ---: | --- |
+| أرشيف الراوي فواز الغسلان | 199 | 19.5 h | <https://itzfaisal.github.io/alrawie/feed.xml> |
+| الكاسيتات الكاملة | 12 | 14.5 h | <https://itzfaisal.github.io/alrawie/kasayet/feed.xml> |
+
+- **Main show** — the 195 individual episodes plus the 4 gap-fillers, grouped
+  into 10 seasons (`itunes:season`) that follow the series folders.
+- **Cassettes** — the 12 full-cassette uploads in a separate show, so the main
+  feed does not duplicate the material the episodes were cut from.
+- Both feeds use the original YouTube upload date only inside the description.
+  Publication dates are assigned in curated order (`BASE_DATE` in
+  `podcast/build_feed.py`) so the list reads like a table of contents instead of
+  a jumble of mirror-upload timestamps.
+- 7 uploads in `القصائد المتداخلة` have no title of their own in the source and
+  are numbered `القصائد المتداخلة — القسم 1…7`; two `مساجله شعريه` uploads get
+  the same suffix. Renaming the catalog row and rebuilding renames the episode.
+
+To listen, paste a feed URL into Overcast, Pocket Casts, AntennaPod, Castro or
+Podverse ("Add by URL"). To appear in a directory, submit the same URL once to
+[Podcasts Connect](https://podcastsconnect.apple.com/); nothing else is needed.
+
+```bash
+python3 podcast/build_feed.py        # regenerate docs/feed.xml and the landing page
+python3 podcast/validate_feed.py     # required tags, sizes, GUIDs, duplicate titles
+python3 podcast/publish_podcast.py --dry-run   # what still needs uploading
+python3 podcast/publish_podcast.py   # resumable: skips assets already present
+swift podcast/make_covers.swift      # redraw both 3000x3000 covers
+```
+
+`publish_podcast.py` creates one release per series (`audio-<slug>`, matching
+the zip slug) and uploads `<video-id>.m4a` files into it. Re-running is safe.
+The feed URLs, asset URLs and GUIDs are permanent API: renaming the repository,
+retagging a release, or deleting and re-uploading an asset breaks every
+subscriber, so treat those names as frozen.
 
 ## What you get
 

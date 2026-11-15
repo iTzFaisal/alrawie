@@ -14,6 +14,9 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
   `downloaded: 207/207`, `size: 1.94 GB`, `runtime covered: 33.3 hours`,
   `supplements: 4/4 (36 MB)`.
 - `verify.py` writes `catalog/download_report.csv` (gitignored).
+- `python3 podcast/validate_feed.py` checks the generated podcast feeds: required
+  iTunes tags, enclosure byte lengths against the local files, GUID and title
+  uniqueness, 3000x3000 covers, and ordering.
 - There is no test suite, linter, typecheck, build, CI, or package manifest.
 
 ## Commands
@@ -34,6 +37,15 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
   `archive-2026-11-15` if needed, uploads missing assets smallest-first, and
   verifies remote sizes. `./release.sh --publish` flips the draft to public.
   Needs an authenticated `gh`; re-running is safe and resumable.
+- `python3 podcast/build_feed.py` — regenerates `docs/feed.xml`,
+  `docs/kasayet/feed.xml` and `docs/index.html` from the manifests, the audio
+  files, and the committed covers. Deterministic; safe to re-run.
+- `python3 podcast/publish_podcast.py` — creates one `audio-<slug>` release per
+  series and uploads each episode as `<video-id>.m4a`. Skips assets already
+  present with the right size, so it resumes after failures. `--dry-run` first.
+- `swift podcast/make_covers.swift` — redraws both 3000x3000 JPEG covers. Uses
+  CoreText because macOS fonts have no Arabic presentation-form glyphs; Pillow
+  alone renders tofu.
 - `yt-dlp` is always run via `uvx --from yt-dlp yt-dlp`; `ffmpeg`/`ffprobe` are
   only needed by `convert_to_audio.py`.
 - Downloads transfer ~2 GB and depend on YouTube. Do not run them unless asked;
@@ -58,6 +70,21 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
   `mafakher-alarab.zip` is produced; their slugs stay in `SLUGS` as reserved.
 - The manifests are a frozen 2026-11-15 snapshot, not a live mirror; do not add
   newer source uploads unless explicitly asked.
+- Podcast feeds are live API. `docs/feed.xml` is served at
+  `https://itzfaisal.github.io/alrawie/feed.xml`; episode GUIDs are video IDs and
+  enclosures point at `releases/download/audio-<slug>/<video-id>.m4a`. Renaming
+  the repo, the slug, or an asset, or deleting and re-uploading one, silently
+  breaks every subscriber. Add new episodes at the end of a season instead of
+  renumbering.
+- `docs/` is generated: edit `podcast/build_feed.py`, not the XML or HTML.
+  `BASE_DATE` is fixed on purpose so a rebuild produces an empty diff; changing
+  it republishes every episode with a new date.
+- The cassette show is deliberately separate from the main show. Putting
+  `audios/كاسيت/` into the main feed would duplicate the 14.5 h that the 195
+  individual episodes were cut from.
+- Feeds skip the 4 supplements from the main series seasons and file them as
+  `مكملات` season 10; they are unique content (`replaces_original` IDs are not in
+  the mirror manifest).
 - `verify.py` indexes main files recursively under `audios/` but counts
   supplements only from `audios/مكملات/`.
 - `convert_to_audio.py` scans only top-level `audios/*.mp4`, not series

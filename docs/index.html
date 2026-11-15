@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الراوي فواز الغسلان — بودكاست</title>
+<style>
+  :root {
+    --ink: #1b1712; --muted: #6d6254; --line: #e4dbcb;
+    --sand: #f7f2e8; --gold: #a8791f; --card: #fffdf8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 48px 20px 72px; background: var(--sand); color: var(--ink);
+    font-family: "Al Nile", "Geeza Pro", "Noto Naskh Arabic", "Segoe UI", Tahoma, sans-serif;
+    line-height: 1.8;
+  }
+  main { max-width: 860px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 40px; }
+  header .kicker { color: var(--gold); letter-spacing: .12em; font-size: 14px; }
+  h1 { font-size: clamp(30px, 5vw, 44px); margin: 10px 0 8px; }
+  header p { color: var(--muted); margin: 0 auto; max-width: 620px; }
+  .shows { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .show {
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+    padding: 22px; display: flex; flex-direction: column; gap: 14px;
+  }
+  .show img { width: 100%; max-width: 240px; border-radius: 12px; align-self: center; }
+  .show h2 { margin: 0; font-size: 22px; }
+  .show p { margin: 0; color: var(--muted); font-size: 15px; }
+  .feed {
+    display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap;
+  }
+  .feed code {
+    flex: 1 1 220px; direction: ltr; text-align: left; background: var(--sand);
+    border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+    font-size: 12px; overflow-wrap: anywhere; font-family: ui-monospace, Menlo, monospace;
+  }
+  button, .button {
+    font: inherit; font-size: 14px; cursor: pointer; border-radius: 10px;
+    border: 1px solid var(--gold); background: var(--gold); color: #fff;
+    padding: 9px 14px; text-decoration: none; white-space: nowrap;
+  }
+  button.secondary, .button.secondary { background: transparent; color: var(--gold); }
+  .meta { font-size: 13px; color: var(--muted); }
+  ol { padding-inline-start: 20px; color: var(--muted); font-size: 15px; }
+  ol li { margin: 6px 0; }
+  footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 13px; }
+  a { color: var(--gold); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="kicker">أرشيف صوتي · ٢٠٢٦</div>
+    <h1>الراوي فواز الغسلان</h1>
+    <p>قصص وقصائد وأمثال من التراث العربي، بصوت الراوي فواز الغسلان.</p>
+  </header>
+
+  <div class="shows">
+    <section class="show">
+      <img src="cover.jpg" alt="أرشيف الراوي فواز الغسلان">
+      <h2>أرشيف الراوي فواز الغسلان</h2>
+      <p>قصص وقصائد وأمثال من التراث العربي بصوت الراوي فواز الغسلان، مجموعة في عشر سلاسل مرتّبة.</p>
+      <div class="meta">١٩٩ حلقة · ١٩ س ٢٩ د · ١٠ سلاسل</div>
+      <div class="feed">
+        <code id="feed-main">https://itzfaisal.github.io/alrawie/feed.xml</code>
+        <button type="button" onclick="copyFeed('main', this)">انسخ الرابط</button>
+      </div>
+      <div class="feed">
+        <a class="button secondary" href="overcast://x-callback-url/add?url=https%3A%2F%2Fitzfaisal.github.io%2Falrawie%2Ffeed.xml">Overcast</a>
+        <a class="button secondary" href="pocketcasts://subscribe/https://itzfaisal.github.io/alrawie/feed.xml">Pocket Casts</a>
+        <a class="button secondary" href="https://itzfaisal.github.io/alrawie/feed.xml">RSS</a>
+      </div>
+    </section>
+    <section class="show">
+      <img src="kasayet/cover.jpg" alt="فواز الغسلان — الكاسيتات الكاملة">
+      <h2>فواز الغسلان — الكاسيتات الكاملة</h2>
+      <p>اثنا عشر كاسيتًا كاملًا لتسجيلات الراوي فواز الغسلان، دون تقطيع، على ترتيب الشريط الأصلي.</p>
+      <div class="meta">١٢ كاسيت · ١٤ س ٢٨ د · سلسلة واحدة</div>
+      <div class="feed">
+        <code id="feed-kasayet">https://itzfaisal.github.io/alrawie/kasayet/feed.xml</code>
+        <button type="button" onclick="copyFeed('kasayet', this)">انسخ الرابط</button>
+      </div>
+      <div class="feed">
+        <a class="button secondary" href="overcast://x-callback-url/add?url=https%3A%2F%2Fitzfaisal.github.io%2Falrawie%2Fkasayet%2Ffeed.xml">Overcast</a>
+        <a class="button secondary" href="pocketcasts://subscribe/https://itzfaisal.github.io/alrawie/kasayet/feed.xml">Pocket Casts</a>
+        <a class="button secondary" href="https://itzfaisal.github.io/alrawie/kasayet/feed.xml">RSS</a>
+      </div>
+    </section>
+  </div>
+
+  <h2 style="margin:44px 0 10px;font-size:20px">كيف تشترك؟</h2>
+  <ol>
+    <li>انسخ رابط الاشتراك (Feed URL) من البطاقة أعلاه.</li>
+    <li>في تطبيق البودكاست اختر «إضافة بودكاست عبر رابط» أو «Add by URL» والصق الرابط: Overcast، Pocket Casts، AntennaPod، Castro، Podverse…</li>
+    <li>للاستظهار في دليل Apple Podcasts أو غيره، أرسل نفس الرابط مرة واحدة إلى <a href="https://podcastsconnect.apple.com/">Podcasts Connect</a>.</li>
+    <li>تحميل الملفات كاملةً (بدون بودكاست): <a href="https://github.com/iTzFaisal/alrawie/releases/latest">صفحة الإصدارات</a>.</li>
+  </ol>
+
+  <footer>
+    الحقوق تعود للراوي فواز الغسلان وللقنوات الناشرة. هذا الأرشيف للحفظ والاستماع الشخصي غير التجاري.<br>
+    <a href="https://github.com/iTzFaisal/alrawie">github.com/iTzFaisal/alrawie</a> · Arabic poetry and folk tales podcast
+  </footer>
+</main>
+<script>
+function copyFeed(key, button) {
+  const text = document.getElementById('feed-' + key).textContent;
+  navigator.clipboard.writeText(text).then(function () {
+    const old = button.textContent;
+    button.textContent = 'تم النسخ';
+    setTimeout(function () { button.textContent = old; }, 1500);
+  });
+}
+</script>
+</body>
+</html>
