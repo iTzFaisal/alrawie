@@ -34,6 +34,8 @@ python3 make_zips.py
 
 if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
   echo "release $TAG exists, reusing it"
+  echo "syncing release notes from $NOTES"
+  gh release edit "$TAG" --repo "$REPO" --notes-file "$NOTES"
 else
   echo "creating draft release $TAG"
   gh release create "$TAG" --repo "$REPO" --draft --title "$TITLE" --notes-file "$NOTES"
