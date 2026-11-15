@@ -57,8 +57,11 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
   supplements only from `audios/مكملات/`.
 - `convert_to_audio.py` scans only top-level `audios/*.mp4`, not series
   subfolders. `--delete-video` removes source MP4s after a duration check.
-- Known source defect: `k7g61lkLMUw` is silent from about 1:13 onward. This is
-  in the source upload, not a bad download; do not re-download or "repair" it.
+- Trailing silence is by design, not a defect: short uploads are padded to a
+  3-minute minimum, and the channel owner confirmed it. 62 files end with 30 s
+  or more of silence (16 of them are more than half silent), and 18 of those
+  also break off early with a ~1.3 s fragment near 1:46. `k7g61lkLMUw` is one
+  of them; do not re-download or "repair" these files.
 - Paths contain Arabic text and the fullwidth `｜` character; quote paths in
   shell commands.
 - Release asset names are Latin slugs defined in `SLUGS` in `make_zips.py`.

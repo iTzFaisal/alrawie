@@ -255,17 +255,20 @@ The mirror channel had 661 public uploads at snapshot time; **207** of them
 name فواز الغسلان. All 207 are included here, plus 4 supplement recordings
 from other channels.
 
-## Known source defect
+## Trailing silence
 
-One source upload has a defective audio track:
+Short recordings are padded with digital silence to a **3-minute minimum**
+before upload. The channel owner confirmed this is by design, not a fault, so
+a clip can run 3:02 while only half of it carries sound. Eighteen of these
+files also break off early: a brief (~1.3 s) fragment near **1:46**, then
+silence to the end.
 
-- `k7g61lkLMUw` — _أمكن تراها ما تفيد الحسايف | جواهر الامثال الشعبيه_
-  (3:02). The source audio is silent from about **1:13** onward, with only a
-  brief sound around **1:46**, then silence to the end.
+`k7g61lkLMUw` (3:02) is one of them: its sound stops at about **1:13**, with the
+usual fragment near 1:46.
 
-This is **not** a corrupted local download. A fresh download from YouTube
-reproduces the same silence. The file is kept as-is for completeness; if a
-complete alternative copy is found, replace it and update the manifest.
+This is **not** a corrupted local download. Re-downloading several affected IDs
+from YouTube produces byte-identical files. Every file is kept exactly as
+published. Do not re-download or "repair" them.
 
 ## Important limits
 
