@@ -11,7 +11,7 @@ cd "$(dirname "$0")"
 
 REPO="${REPO:-iTzFaisal/alrawie}"
 TAG="${TAG:-archive-2026-11-15}"
-TITLE="${TITLE:-أرشيف فواز الغسلان الصوتي — 211 مقطعًا (12 سلسلة)}"
+TITLE="${TITLE:-أرشيف فواز الغسلان الصوتي — 211 مقطعًا (11 سلسلة)}"
 OUT="dist/release"
 NOTES="RELEASE_NOTES.md"
 PUBLISH=0

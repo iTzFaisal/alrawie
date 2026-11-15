@@ -47,7 +47,7 @@ All audio is published on the
 **[Releases page](https://github.com/iTzFaisal/alrawie/releases/latest)** — no
 scripts needed, each series is a ready-to-extract zip. The current snapshot is
 [`archive-2026-11-15`](https://github.com/iTzFaisal/alrawie/releases/tag/archive-2026-11-15):
-12 archives with 211 files (1.98 GB) plus `SHA256SUMS.txt`.
+11 archives with 211 files (1.98 GB) plus `SHA256SUMS.txt`.
 
 ```bash
 gh release download archive-2026-11-15 --repo iTzFaisal/alrawie
@@ -70,7 +70,8 @@ so extracting under `audios/` reproduces this repository's layout exactly; the
 
 - **207/207** mirror-channel uploads whose titles name فواز الغسلان.
 - 195 individual episodes and 12 full-cassette uploads.
-- Organized into one folder per series under `audios/<series>/`.
+- Organized into one folder per series under `audios/<series>/`. The 12 full
+  cassettes are collected separately in `audios/كاسيت/`.
 - Audio format: **M4A / AAC**, ~128 kbps, stream-copied from the source with no
   re-encode.
 - No video is downloaded — every file is audio-only.
@@ -82,22 +83,28 @@ Each audio file is placed in the folder for its series:
 
 | Folder                  | Files | Release asset                 |
 | ----------------------- | ----: | ----------------------------- |
-| `الموسوعة الشعرية`      |    57 | `mawsuat-sheriya.zip`         |
-| `نوادر من التراث`       |    49 | `nawader-min-alturath.zip`    |
-| `جواهر الأمثال الشعبية` |    38 | `jawaher-amthal-shaabiya.zip` |
-| `عاشق ومعشوق`           |    23 | `asheq-wamaashuq.zip`         |
-| `ضحايا العشق`           |    17 | `dahaya-aleshq.zip`           |
-| `القصائد المتداخلة`     |    10 | `qasaid-mutadakhila.zip`      |
-| `فنجال الكيف`           |     7 | `finjal-alkayf.zip`           |
-| `مفاخر العرب`           |     1 | `mafakher-alarab.zip`         |
-| `موسوعة التاريخ والأدب` |     1 | `mawsuat-tarikh-wa-adab.zip`  |
-| `نوادر شعرية`           |     1 | `nawader-sheriya.zip`         |
-| `أخرى`                  |     3 | `okhra.zip`                   |
+| `الموسوعة الشعرية`      |    54 | `mawsuat-sheriya.zip`         |
+| `نوادر من التراث`       |    47 | `nawader-min-alturath.zip`    |
+| `جواهر الأمثال الشعبية` |    37 | `jawaher-amthal-shaabiya.zip` |
+| `عاشق ومعشوق`           |    22 | `asheq-wamaashuq.zip`         |
+| `ضحايا العشق`           |    16 | `dahaya-aleshq.zip`           |
+| `كاسيت`                 |    12 | `kasayet.zip`                 |
+| `القصائد المتداخلة`     |     9 | `qasaid-mutadakhila.zip`      |
+| `فنجال الكيف`           |     6 | `finjal-alkayf.zip`           |
 | `مكملات`                |     4 | `mukammilat.zip`              |
+| `أخرى`                  |     3 | `okhra.zip`                   |
+| `موسوعة التاريخ والأدب` |     1 | `mawsuat-tarikh-wa-adab.zip`  |
 
 `أخرى` is the catch-all for the few uploads whose titles do not name a series.
-The `series` value is stored in `catalog/ghasslan_mirrors.csv`, so the
-downloader and organizer use the same mapping.
+`كاسيت` holds the 12 full-cassette uploads, which are the complete tapes the
+individual episodes were cut from; their catalog `series` is `كاسيت` even
+though each cassette's title names its original series. The `series` value is
+stored in `catalog/ghasslan_mirrors.csv`, so the downloader and organizer use
+the same mapping.
+
+Two series exist only as cassettes, so after the tapes were collected into
+`كاسيت` their folders hold no separate episodes: **مفاخر العرب** and
+**نوادر شعرية**. Their recordings are inside `kasayet.zip`.
 
 ## Requirements
 
@@ -120,11 +127,12 @@ version through `uvx --from yt-dlp yt-dlp`.
 │   ├── جواهر الأمثال الشعبية/
 │   ├── عاشق ومعشوق/
 │   ├── ضحايا العشق/
+│   ├── كاسيت/                  # 12 full-cassette uploads
 │   ├── القصائد المتداخلة/
 │   ├── فنجال الكيف/
-│   ├── مفاخر العرب/
+│   ├── مفاخر العرب/            # empty: its only upload is a cassette
 │   ├── موسوعة التاريخ والأدب/
-│   ├── نوادر شعرية/
+│   ├── نوادر شعرية/            # empty: its only upload is a cassette
 │   ├── أخرى/
 │   └── مكملات/                 # 4 extra M4A files (gitignored)
 ├── metadata/                   # yt-dlp .info.json sidecars (gitignored)
@@ -160,8 +168,9 @@ After a fresh clone, the `audios/` series folders and `metadata/` contain only
 ```
 
 Downloads the 207 main uploads and runs `organize.py`, which places each file
-in `audios/<series>/`. It uses 8 parallel workers by default because YouTube
-throttles each connection individually:
+in `audios/<series>/` — or `audios/كاسيت/` for the 12 full cassettes. It uses 8
+parallel workers by default because YouTube throttles each connection
+individually:
 
 ```bash
 WORKERS=12 ./download.sh     # more concurrency
@@ -206,10 +215,10 @@ folders), prints coverage, total size, and runtime, and writes
 
 `make_zips.py` stores files uncompressed (M4A does not shrink), writes UTF-8
 filenames so Arabic extracts correctly everywhere, and only rebuilds archives
-whose sources changed (`--force` rebuilds all). Uploads are resumable: assets
-whose size already matches are skipped, and `release.sh` refuses to publish if
-any local archive is missing or differs in size. Requires an authenticated
-[`gh`](https://cli.github.com) CLI.
+whose sources or entry list changed (`--force` rebuilds all). Uploads are
+resumable: assets whose size already matches are skipped, and `release.sh`
+refuses to publish if any local archive is missing or differs in size. Requires
+an authenticated [`gh`](https://cli.github.com) CLI.
 
 ## Catalog files
 

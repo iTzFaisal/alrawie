@@ -39,6 +39,7 @@ SLUGS = {
     "ضحايا العشق": "dahaya-aleshq",
     "عاشق ومعشوق": "asheq-wamaashuq",
     "فنجال الكيف": "finjal-alkayf",
+    "كاسيت": "kasayet",
     "مفاخر العرب": "mafakher-alarab",
     "مكملات": "mukammilat",
     "موسوعة التاريخ والأدب": "mawsuat-tarikh-wa-adab",
@@ -69,11 +70,20 @@ def source_files(folder: Path) -> list[Path]:
     return sorted(files, key=lambda path: path.relative_to(folder).as_posix())
 
 
-def needs_rebuild(zip_path: Path, files: list[Path], force: bool) -> bool:
+def expected_names(folder: Path, files: list[Path]) -> list[str]:
+    return [f"{folder.name}/{path.relative_to(folder).as_posix()}" for path in files]
+
+
+def needs_rebuild(zip_path: Path, folder: Path, files: list[Path], force: bool) -> bool:
     if force or not zip_path.exists():
         return True
     built = zip_path.stat().st_mtime
-    return any(path.stat().st_mtime > built for path in files)
+    if any(path.stat().st_mtime > built for path in files):
+        return True
+    # A moved or deleted source leaves the old zip looking fresh, so compare
+    # the entry list as well as the timestamps.
+    with zipfile.ZipFile(zip_path) as archive:
+        return archive.namelist() != expected_names(folder, files)
 
 
 def build(folder: Path, zip_path: Path, files: list[Path]) -> None:
@@ -86,7 +96,7 @@ def build(folder: Path, zip_path: Path, files: list[Path]) -> None:
 
     with zipfile.ZipFile(zip_path) as archive:
         names = archive.namelist()
-    expected = [f"{folder.name}/{p.relative_to(folder).as_posix()}" for p in files]
+    expected = expected_names(folder, files)
     if names != expected:
         raise SystemExit(f"self-check failed for {zip_path.name}: entry mismatch")
 
@@ -121,7 +131,7 @@ def main() -> int:
             continue
 
         zip_path = OUT / asset_name(folder)
-        action = "rebuilt" if needs_rebuild(zip_path, files, args.force) else "kept"
+        action = "rebuilt" if needs_rebuild(zip_path, folder, files, args.force) else "kept"
         if action == "rebuilt":
             build(folder, zip_path, files)
 

@@ -51,6 +51,11 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
 - Supplements are identified by the `audios/مكملات/` path. `organize.py`
   deliberately never moves them, and the main downloader excludes their IDs.
   The two manifests must not overlap.
+- `audios/كاسيت/` is a collection, not a series: the 12 full-cassette uploads
+  live there and their catalog `series` is `كاسيت`, even though each title
+  names its original series. `نوادر شعرية` and `مفاخر العرب` consequently hold
+  only `.gitkeep`, so `make_zips.py` skips them and no `nawader-sheriya.zip` or
+  `mafakher-alarab.zip` is produced; their slugs stay in `SLUGS` as reserved.
 - The manifests are a frozen 2026-11-15 snapshot, not a live mirror; do not add
   newer source uploads unless explicitly asked.
 - `verify.py` indexes main files recursively under `audios/` but counts
