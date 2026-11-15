@@ -27,6 +27,13 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
   `state/downloads_audio.txt` when parallel workers hit rate limits.
 - `python3 organize.py` — idempotently moves audio into `audios/<series>/`
   based on the catalog and sidecars into `metadata/`.
+- `python3 make_zips.py` — builds `dist/release/<series>.zip` for every folder
+  under `audios/`, plus `SHA256SUMS.txt` and `summary.tsv`. Archives are stored
+  (no deflate) and rebuilt only when a source file is newer (use `--force`).
+- `./release.sh` — builds the zips, creates the draft GitHub release
+  `archive-2026-11-15` if needed, uploads missing assets smallest-first, and
+  verifies remote sizes. `./release.sh --publish` flips the draft to public.
+  Needs an authenticated `gh`; re-running is safe and resumable.
 - `yt-dlp` is always run via `uvx --from yt-dlp yt-dlp`; `ffmpeg`/`ffprobe` are
   only needed by `convert_to_audio.py`.
 - Downloads transfer ~2 GB and depend on YouTube. Do not run them unless asked;
@@ -54,5 +61,11 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
   in the source upload, not a bad download; do not re-download or "repair" it.
 - Paths contain Arabic text and the fullwidth `｜` character; quote paths in
   shell commands.
+- Release asset names are Latin slugs defined in `SLUGS` in `make_zips.py`.
+  GitHub strips non-ASCII characters from uploaded filenames, so Arabic cannot
+  be used on the asset itself; the zip's top-level folder keeps the real Arabic
+  name. Adding a series folder requires adding a slug or the build fails.
+  `RELEASE_NOTES.md` and the README release section must be updated when the
+  tag, asset set, or counts change.
 - `README.md` is the published documentation. Reconcile its counts and expected
   output when catalog rows, scripts, or archive contents change.

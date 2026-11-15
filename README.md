@@ -1,6 +1,7 @@
 # الراوي فواز الغسلان — audio archive
 
 [![GitHub](https://img.shields.io/badge/GitHub-iTzFaisal%2Falrawie-181717?logo=github)](https://github.com/iTzFaisal/alrawie)
+[![Download](https://img.shields.io/badge/Download-GitHub%20Releases-2ea44f?logo=github)](https://github.com/iTzFaisal/alrawie/releases/latest)
 
 A preservation archive of **فواز الغسلان** recordings recovered from the
 surviving mirror channel **صدى نجد دوت كوم** (`@alraawy_2`).
@@ -11,8 +12,8 @@ Ghasslan part of that catalog from third-party reuploads and keeps it as
 **audio-only M4A files**.
 
 > **The audio is not stored in this Git repository.** The archive is about
-> 2 GB, so GitHub only hosts the manifests and download scripts. Clone the
-> repo and run the downloader to get the audio.
+> 2 GB, so the audio ships as GitHub Release assets: grab the per-series zips
+> below, or clone the repo and run the downloader.
 
 ## Quick start
 
@@ -37,12 +38,34 @@ supplements: 4/4 (36 MB)
 The order of the two download commands does not matter. Re-running either
 script skips files that already exist, so downloads are resumable.
 
+If you only want the audio, skip all of this and go to
+**[Download](#download)**.
+
+## Download
+
+All audio is published on the
+**[Releases page](https://github.com/iTzFaisal/alrawie/releases/latest)** — no
+scripts needed, each series is a ready-to-extract zip. The current snapshot is
+[`archive-2026-11-15`](https://github.com/iTzFaisal/alrawie/releases/tag/archive-2026-11-15):
+12 archives with 211 files (1.98 GB) plus `SHA256SUMS.txt`.
+
+```bash
+gh release download archive-2026-11-15 --repo iTzFaisal/alrawie
+shasum -a 256 -c SHA256SUMS.txt
+for z in *.zip; do unzip -q "$z" -d audios; done
+```
+
+Asset names are Latin slugs because GitHub strips non-ASCII characters from
+release filenames. Each zip keeps the original Arabic folder as its top level,
+so extracting under `audios/` reproduces this repository's layout exactly; the
+[folder table](#series-folders) maps every slug to its series.
+
 ## What you get
 
 | Item                   |   Count |        Size |                 Runtime |
 | ---------------------- | ------: | ----------: | ----------------------: |
 | Main channel uploads   |     207 |     1.94 GB |                  33.3 h |
-| Gap-filler supplements |       4 |       36 MB |                       — |
+| Gap-filler supplements |       4 |       36 MB |                   0.6 h |
 | **Total**              | **211** | **1.98 GB** | **33.9 h actual audio** |
 
 - **207/207** mirror-channel uploads whose titles name فواز الغسلان.
@@ -57,20 +80,20 @@ script skips files that already exist, so downloads are resumable.
 
 Each audio file is placed in the folder for its series:
 
-| Folder                  | Files |
-| ----------------------- | ----: |
-| `الموسوعة الشعرية`      |    57 |
-| `نوادر من التراث`       |    49 |
-| `جواهر الأمثال الشعبية` |    38 |
-| `عاشق ومعشوق`           |    23 |
-| `ضحايا العشق`           |    17 |
-| `القصائد المتداخلة`     |    10 |
-| `فنجال الكيف`           |     7 |
-| `مفاخر العرب`           |     1 |
-| `موسوعة التاريخ والأدب` |     1 |
-| `نوادر شعرية`           |     1 |
-| `أخرى`                  |     3 |
-| `مكملات`                |     4 |
+| Folder                  | Files | Release asset                 |
+| ----------------------- | ----: | ----------------------------- |
+| `الموسوعة الشعرية`      |    57 | `mawsuat-sheriya.zip`         |
+| `نوادر من التراث`       |    49 | `nawader-min-alturath.zip`    |
+| `جواهر الأمثال الشعبية` |    38 | `jawaher-amthal-shaabiya.zip` |
+| `عاشق ومعشوق`           |    23 | `asheq-wamaashuq.zip`         |
+| `ضحايا العشق`           |    17 | `dahaya-aleshq.zip`           |
+| `القصائد المتداخلة`     |    10 | `qasaid-mutadakhila.zip`      |
+| `فنجال الكيف`           |     7 | `finjal-alkayf.zip`           |
+| `مفاخر العرب`           |     1 | `mafakher-alarab.zip`         |
+| `موسوعة التاريخ والأدب` |     1 | `mawsuat-tarikh-wa-adab.zip`  |
+| `نوادر شعرية`           |     1 | `nawader-sheriya.zip`         |
+| `أخرى`                  |     3 | `okhra.zip`                   |
+| `مكملات`                |     4 | `mukammilat.zip`              |
 
 `أخرى` is the catch-all for the few uploads whose titles do not name a series.
 The `series` value is stored in `catalog/ghasslan_mirrors.csv`, so the
@@ -111,11 +134,15 @@ version through `uvx --from yt-dlp yt-dlp`.
 │   └── supplements.csv         # 4 gap-filler manifest
 ├── state/                      # yt-dlp bookkeeping (gitignored)
 ├── logs/                       # download logs (gitignored)
+├── dist/release/               # generated release zips (gitignored)
 ├── download.sh                 # parallel audio downloader
 ├── download_supplements.sh     # downloads the 4 gap-fillers
 ├── download_sequential.sh      # single-queue fallback
 ├── organize.py                 # moves new audio into series folders + sidecars
 ├── verify.py                   # coverage/size report
+├── make_zips.py                # one zip per series folder + SHA256SUMS.txt
+├── release.sh                  # uploads the zips to a GitHub release
+├── RELEASE_NOTES.md            # release page text
 ├── convert_to_audio.py         # optional MP4 -> M4A converter
 ├── README.md
 └── .gitignore
@@ -124,7 +151,7 @@ version through `uvx --from yt-dlp yt-dlp`.
 After a fresh clone, the `audios/` series folders and `metadata/` contain only
 `.gitkeep` files. The audio and metadata are intentionally excluded from Git.
 
-## Downloading
+## Downloading with the scripts
 
 ### Main archive
 
@@ -169,6 +196,20 @@ python3 verify.py
 This checks every manifest row against the files on disk (including series
 folders), prints coverage, total size, and runtime, and writes
 `catalog/download_report.csv` (gitignored).
+
+## Rebuilding the release zips
+
+```bash
+./release.sh              # build, upload to a draft release, verify sizes
+./release.sh --publish    # flip the verified draft to public
+```
+
+`make_zips.py` stores files uncompressed (M4A does not shrink), writes UTF-8
+filenames so Arabic extracts correctly everywhere, and only rebuilds archives
+whose sources changed (`--force` rebuilds all). Uploads are resumable: assets
+whose size already matches are skipped, and `release.sh` refuses to publish if
+any local archive is missing or differs in size. Requires an authenticated
+[`gh`](https://cli.github.com) CLI.
 
 ## Catalog files
 
@@ -282,15 +323,15 @@ ffmpeg -i "input.webm" -vn -c:a aac -b:a 128k "output.m4a"
 
 **I want the files without running scripts**
 
-The archive is too large for a normal Git repository. Publish the downloaded
-folder as GitHub Release assets or host it externally if you need direct
-download links.
+Use the [release zips](#download) — every series is published as a
+ready-to-extract archive with checksums.
 
 ## Safe to delete
 
 These are regenerable or disposable:
 
 - `logs/` — download logs
+- `dist/` — generated release zips, rebuilt by `make_zips.py`
 - `catalog/download_report.csv` — regenerated by `verify.py`
 - `catalog/urls.txt`, `catalog/chunk_*.txt`, `catalog/remaining_audio.txt` —
   generated by the downloaders

@@ -11,6 +11,9 @@ audios/**/*.f*.mp4
 metadata/**/*.info.json
 *.info.json
 
+# Release build artifacts
+dist/
+
 # Runtime state and logs
 state/
 logs/
