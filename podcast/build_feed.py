@@ -28,7 +28,7 @@ DOCS = ROOT / "docs"
 SITE = "https://itzfaisal.github.io/alrawie"
 REPO = "iTzFaisal/alrawie"
 DOWNLOAD = f"https://github.com/{REPO}/releases/download"
-OWNER_EMAIL = "iTzFaisal@users.noreply.github.com"
+OWNER_EMAIL = "faisalalkheraiji@gmail.com"
 
 # Every episode gets a distinct publication timestamp so the feed order is the
 # curated order (podcast apps list newest first). Fixed, not "now", so rebuilds
