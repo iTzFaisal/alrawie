@@ -1,0 +1,35 @@
+# Audio archive (large binaries — keep them local/backed up, not in git)
+audios/**/*.m4a
+audios/**/*.mp4
+audios/**/*.webm
+audios/**/*.opus
+audios/**/*.part
+audios/**/*.f*.m4a
+audios/**/*.f*.mp4
+
+# yt-dlp sidecar metadata (bulk). The small catalog CSVs are tracked instead.
+metadata/**/*.info.json
+*.info.json
+
+# Runtime state and logs
+state/
+logs/
+downloads*.txt
+catalog/download_report.csv
+catalog/urls.txt
+catalog/chunk_*.txt
+catalog/remaining_audio.txt
+catalog/supplement_ids.txt
+catalog/supplement_urls.txt
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
