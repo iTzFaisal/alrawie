@@ -8,7 +8,10 @@ Only the standard library is used, so this runs on a bare checkout.
 
 from __future__ import annotations
 
+import argparse
 import sys
+import urllib.error
+import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -140,11 +143,51 @@ def check_show(show: bf.Show) -> None:
     )
 
 
+def check_urls(shows: list[bf.Show]) -> int:
+    """HEAD every enclosure: catches releases that were not uploaded or renamed."""
+    problems = 0
+    for show in shows:
+        for episode in show.episodes:
+            tag = dict(show.seasons)[episode.series]
+            request = urllib.request.Request(
+                episode.url(f"audio-{tag}"), method="HEAD",
+                headers={"User-Agent": "alrawie-feed-check"},
+            )
+            try:
+                with urllib.request.urlopen(request, timeout=30) as response:
+                    status = response.status
+                    length = response.headers.get("Content-Length")
+                if length is not None and int(length) != episode.size:
+                    print(f"  size mismatch {episode.asset}: {length} != {episode.size}")
+                    problems += 1
+                    continue
+            except urllib.error.HTTPError as error:
+                status = error.code
+            except Exception as error:  # noqa: BLE001 - report and keep going
+                print(f"  error {episode.asset}: {error}")
+                problems += 1
+                continue
+            if status != 200:
+                print(f"  HTTP {status} {episode.asset}")
+                problems += 1
+        print(f"checked {show.key}: {len(show.episodes)} enclosure URLs")
+    return problems
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--urls", action="store_true", help="also HEAD every enclosure URL")
+    args = parser.parse_args()
+
     shows = bf.build_shows()
     for show in shows:
         check_cover(show)
         check_show(show)
+    if args.urls:
+        problems = check_urls(shows)
+        if problems:
+            print(f"{problems} enclosure problems")
+            return 1
     print("all checks passed")
     return 0
 

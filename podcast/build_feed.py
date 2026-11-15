@@ -421,7 +421,10 @@ PAGE = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f2e8">
 <title>{title}</title>
+<link rel="alternate" type="application/rss+xml" title="أرشيف الراوي فواز الغسلان" href="feed.xml">
+<link rel="alternate" type="application/rss+xml" title="الكاسيتات الكاملة" href="kasayet/feed.xml">
 <style>
   :root {{
     --ink: #1b1712; --muted: #6d6254; --line: #e4dbcb;

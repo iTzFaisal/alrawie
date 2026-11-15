@@ -90,7 +90,7 @@ Podverse ("Add by URL"). To appear in a directory, submit the same URL once to
 
 ```bash
 python3 podcast/build_feed.py        # regenerate docs/feed.xml and the landing page
-python3 podcast/validate_feed.py     # required tags, sizes, GUIDs, duplicate titles
+python3 podcast/validate_feed.py     # tags, sizes, GUIDs, titles; --urls checks every link
 python3 podcast/publish_podcast.py --dry-run   # what still needs uploading
 python3 podcast/publish_podcast.py   # resumable: skips assets already present
 swift podcast/make_covers.swift      # redraw both 3000x3000 covers
