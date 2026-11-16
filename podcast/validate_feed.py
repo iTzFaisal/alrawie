@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check docs/feed.xml and docs/kasayet/feed.xml before publishing.
+"""Check both feeds and the landing page player before publishing.
 
     python3 podcast/validate_feed.py
 
@@ -9,6 +9,8 @@ Only the standard library is used, so this runs on a bare checkout.
 from __future__ import annotations
 
 import argparse
+import html
+import re
 import sys
 import urllib.error
 import urllib.request
@@ -143,6 +145,54 @@ def check_show(show: bf.Show) -> None:
     )
 
 
+EPISODE_LINK_RE = re.compile(
+    r'<a class="ep" href="([^"]+)" data-id="([A-Za-z0-9_-]{11})" '
+    r'data-title="([^"]*)" data-series="[^"]*" data-number="\d+" '
+    r'data-duration="(\d+)"'
+)
+
+
+def check_landing(shows: list[bf.Show]) -> None:
+    """Every feed episode must be playable exactly once from the landing page."""
+    path = bf.DOCS / "index.html"
+    if not path.exists():
+        fail(f"missing landing page {path}")
+    text = path.read_text(encoding="utf-8")
+    for marker in ('id="player"', 'id="p-audio"', 'id="p-toggle"'):
+        if marker not in text:
+            fail(f"landing page is missing {marker}")
+
+    found = EPISODE_LINK_RE.findall(text)
+    expected: list[tuple[str, str, str, str]] = []
+    for show in shows:
+        if f'id="panel-{show.key}"' not in text:
+            fail(f"landing page is missing the {show.key} panel")
+        for episode in show.episodes:
+            tag = dict(show.seasons)[episode.series]
+            expected.append(
+                (
+                    episode.url(f"audio-{tag}"),
+                    episode.video_id,
+                    episode.title,
+                    str(episode.duration),
+                )
+            )
+
+    if len(found) != len(expected):
+        fail(f"landing page lists {len(found)} episodes, expected {len(expected)}")
+
+    ids = [row[1] for row in found]
+    if len(ids) != len(set(ids)):
+        fail("landing page lists an episode twice")
+
+    for actual, wanted in zip(found, expected):
+        url, video_id, title, duration = actual
+        if (url, video_id, html.unescape(title), duration) != wanted:
+            fail(f"landing page episode {video_id} does not match the feed")
+
+    print(f"ok landing: {len(found)} playable episodes, player present")
+
+
 def check_urls(shows: list[bf.Show]) -> int:
     """HEAD every enclosure: catches releases that were not uploaded or renamed."""
     problems = 0
@@ -183,6 +233,7 @@ def main() -> int:
     for show in shows:
         check_cover(show)
         check_show(show)
+    check_landing(shows)
     if args.urls:
         problems = check_urls(shows)
         if problems:

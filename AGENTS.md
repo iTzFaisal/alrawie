@@ -8,15 +8,16 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
 
 ## Verify state
 
-- `python3 verify.py` is the only check; it uses the standard library only and
-  needs no venv or installed packages.
+- `python3 verify.py` checks the local media archive; it uses the standard
+  library only and needs no venv or installed packages.
 - Expected output for the complete local archive:
   `downloaded: 207/207`, `size: 1.94 GB`, `runtime covered: 33.3 hours`,
   `supplements: 4/4 (36 MB)`.
 - `verify.py` writes `catalog/download_report.csv` (gitignored).
-- `python3 podcast/validate_feed.py` checks the generated podcast feeds: required
-  iTunes tags, enclosure byte lengths against the local files, GUID and title
-  uniqueness, 3000x3000 covers, and ordering.
+- `python3 podcast/validate_feed.py` checks the generated feeds and landing page:
+  required iTunes tags, enclosure byte lengths against the local files, GUID and
+  title uniqueness, 3000x3000 covers, ordering, and exactly one playable row per
+  episode in `docs/index.html`.
 - There is no test suite, linter, typecheck, build, CI, or package manifest.
 
 ## Commands
@@ -37,9 +38,10 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
   `archive-2026-11-15` if needed, uploads missing assets smallest-first, and
   verifies remote sizes. `./release.sh --publish` flips the draft to public.
   Needs an authenticated `gh`; re-running is safe and resumable.
-- `python3 podcast/build_feed.py` — regenerates `docs/feed.xml`,
-  `docs/kasayet/feed.xml` and `docs/index.html` from the manifests, the audio
-  files, and the committed covers. Deterministic; safe to re-run.
+- `python3 podcast/build_feed.py` — regenerates both feeds and `docs/index.html`
+  from the manifests, the audio files, and the committed covers. The page
+  includes the on-page player: season lists, title search, deep links, and the
+  sticky audio bar. Deterministic; safe to re-run.
 - `python3 podcast/publish_podcast.py` — creates one `audio-<slug>` release per
   series and uploads each episode as `<video-id>.m4a`. Skips assets already
   present with the right size, so it resumes after failures. `--dry-run` first.
@@ -74,13 +76,18 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
   `https://itzfaisal.github.io/alrawie/feed.xml`; episode GUIDs are video IDs and
   enclosures point at `releases/download/audio-<slug>/<video-id>.m4a`. Renaming
   the repo, the slug, or an asset, or deleting and re-uploading one, silently
-  breaks every subscriber. Add new episodes at the end of a season instead of
-  renumbering. The Apple Podcasts IDs (`6835240326` main, `6835240746`
-  cassettes) are bound to these feed URLs and would have to be resubmitted if
-  the URL changed.
-- `docs/` is generated: edit `podcast/build_feed.py`, not the XML or HTML.
-  `BASE_DATE` is fixed on purpose so a rebuild produces an empty diff; changing
-  it republishes every episode with a new date.
+  breaks every subscriber and the landing-page player. Add new episodes at the
+  end of a season instead of renumbering. The Apple Podcasts IDs (`6835240326`
+  main, `6835240746` cassettes) are bound to these feed URLs and would have to be
+  resubmitted if the URL changed.
+- `docs/` is generated: edit `podcast/build_feed.py`, not the XML, the HTML, or
+  the inline player CSS/JS. `BASE_DATE` is fixed on purpose so a rebuild produces
+  an empty diff; changing it republishes every episode with a new date.
+- The landing page uses a single `<audio>` element and streams the selected
+  release asset; episode rows carry `data-id`, `data-title`, `data-duration`,
+  and the asset `href`. Every catalog episode must appear exactly once, and
+  `validate_feed.py` enforces that. Do not preload all 211 files or add a second
+  audio element per row.
 - The cassette show is deliberately separate from the main show. Putting
   `audios/كاسيت/` into the main feed would duplicate the 14.5 h that the 195
   individual episodes were cut from.

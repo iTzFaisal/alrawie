@@ -13,6 +13,8 @@
     --sand: #f7f2e8; --gold: #a8791f; --card: #fffdf8;
   }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0; padding: 48px 20px 72px; background: var(--sand); color: var(--ink);
     font-family: "Al Nile", "Geeza Pro", "Noto Naskh Arabic", "Segoe UI", Tahoma, sans-serif;
@@ -23,7 +25,7 @@
   header .kicker { color: var(--gold); letter-spacing: .12em; font-size: 14px; }
   h1 { font-size: clamp(30px, 5vw, 44px); margin: 10px 0 8px; }
   header p { color: var(--muted); margin: 0 auto; max-width: 620px; }
-  .shows { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .shows { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
   .show {
     background: var(--card); border: 1px solid var(--line); border-radius: 18px;
     padding: 22px; display: flex; flex-direction: column; gap: 14px;
@@ -43,6 +45,7 @@
     font: inherit; font-size: 14px; cursor: pointer; border-radius: 10px;
     border: 1px solid var(--gold); background: var(--gold); color: #fff;
     padding: 9px 14px; text-decoration: none; white-space: nowrap;
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
   }
   button.secondary, .button.secondary { background: transparent; color: var(--gold); }
   .button.apple { background: #111; border-color: #111; color: #fff; display: inline-flex; align-items: center; gap: 8px; }
@@ -52,6 +55,114 @@
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath d='M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z'/%3E%3C/svg%3E") no-repeat center / contain;
   }
   .meta { font-size: 13px; color: var(--muted); }
+  .listen { margin-top: 46px; scroll-margin-top: 24px; }
+  .listen > h2 { margin: 0 0 6px; font-size: 20px; }
+  .listen .hint { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+  .tabs {
+    display: flex; gap: 4px; padding: 4px; border: 1px solid var(--line);
+    background: #efe7d8; border-radius: 12px;
+  }
+  .tabs button {
+    flex: 1; padding: 9px 10px; border: 0; border-radius: 9px;
+    background: transparent; color: var(--muted); font-size: 14px;
+  }
+  .tabs button[aria-selected="true"] {
+    background: var(--card); color: var(--ink);
+    box-shadow: 0 1px 3px rgba(27, 23, 18, .1);
+  }
+  .search { display: block; margin: 16px 0 4px; }
+  .search input {
+    width: 100%; padding: 11px 14px; border: 1px solid var(--line);
+    border-radius: 10px; background: var(--card); color: var(--ink);
+    font: inherit; font-size: 14px;
+  }
+  .search input:focus { outline: 2px solid rgba(168, 121, 31, .35); outline-offset: 1px; }
+  .no-results { color: var(--muted); font-size: 14px; padding: 10px 4px; }
+  .season {
+    margin: 10px 0; border: 1px solid var(--line); border-radius: 14px;
+    background: var(--card); overflow: hidden;
+  }
+  .season summary {
+    display: flex; align-items: center; gap: 10px; padding: 13px 15px;
+    cursor: pointer; list-style: none; font-weight: 600;
+  }
+  .season summary::-webkit-details-marker { display: none; }
+  .season summary:hover { background: #faf5ea; }
+  .season-name { flex: 1; min-width: 0; font-size: 15px; }
+  .season-meta { color: var(--muted); font-size: 12px; font-weight: 400; white-space: nowrap; }
+  .chev { flex: none; width: 18px; height: 18px; fill: var(--muted); transition: transform .2s; }
+  .season[open] .chev { transform: rotate(180deg); }
+  .episodes { margin: 0; padding: 0 6px 8px; list-style: none; }
+  .ep {
+    display: grid; grid-template-columns: 26px minmax(0, 1fr) auto 22px;
+    align-items: center; gap: 10px; padding: 8px 10px; border-radius: 9px;
+    color: var(--ink); text-decoration: none; font-size: 14px; line-height: 1.55;
+  }
+  .ep:hover { background: #f6efdf; }
+  .ep.playing { background: #f2e5c9; }
+  .ep-num { color: var(--muted); font-size: 11px; text-align: center; }
+  .ep-name { min-width: 0; }
+  .ep-time { color: var(--muted); font-size: 11.5px; white-space: nowrap; }
+  .ep-icon { display: flex; justify-content: center; }
+  .ep-icon svg { width: 15px; height: 15px; fill: var(--gold); opacity: .5; }
+  .ep:hover .ep-icon svg, .ep.playing .ep-icon svg { opacity: 1; }
+  .ep.playing .ep-icon svg { fill: var(--ink); }
+  .listen-jump { width: 100%; }
+  .btn-icon { width: 14px; height: 14px; fill: currentColor; flex: none; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+  .icons { display: none; }
+  .player {
+    position: fixed; inset-inline: 0; bottom: 0; z-index: 40;
+    background: #1b1712; color: #f7f2e8;
+    box-shadow: 0 -10px 30px rgba(27, 23, 18, .25);
+  }
+  .player-inner {
+    max-width: 860px; margin: 0 auto; padding: 9px 16px 11px;
+    display: grid; align-items: center; gap: 6px 12px;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    grid-template-areas: "cover info actions" "controls controls controls" "seek seek seek";
+  }
+  .p-cover { grid-area: cover; width: 44px; height: 44px; border-radius: 8px; object-fit: cover; }
+  .p-info { grid-area: info; min-width: 0; line-height: 1.45; }
+  .p-title { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .p-sub { font-size: 11.5px; color: #bdb19d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .p-controls { grid-area: controls; display: flex; align-items: center; justify-content: center; gap: 2px; }
+  .p-actions { grid-area: actions; display: flex; align-items: center; gap: 2px; }
+  .pbtn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px; padding: 0; border: 0; border-radius: 999px;
+    background: transparent; color: inherit; cursor: pointer;
+  }
+  .pbtn:hover { background: rgba(247, 242, 232, .1); }
+  .pbtn svg { width: 20px; height: 20px; fill: currentColor; }
+  #p-toggle { width: 44px; height: 44px; background: var(--gold); color: #fff; }
+  #p-toggle:hover { background: #b9842a; }
+  #p-toggle svg { width: 22px; height: 22px; }
+  .p-rate {
+    height: 30px; margin-inline-start: 6px; padding: 0 6px; border-radius: 7px;
+    border: 1px solid rgba(247, 242, 232, .3); background: transparent;
+    color: inherit; font: inherit; font-size: 12px;
+  }
+  .p-rate option { color: var(--ink); }
+  .p-seek { grid-area: seek; display: flex; align-items: center; gap: 10px; }
+  #p-range { flex: 1; min-width: 0; height: 18px; accent-color: var(--gold); cursor: pointer; }
+  .p-time {
+    min-width: 40px; text-align: center; font-size: 11px;
+    color: #cfc4b0; font-variant-numeric: tabular-nums;
+  }
+  body.has-player { padding-bottom: 214px; }
+  @media (min-width: 700px) {
+    .player-inner {
+      grid-template-columns: 46px minmax(0, 1fr) auto auto;
+      grid-template-areas: "cover info controls actions" "seek seek seek seek";
+      padding: 10px 18px 12px;
+    }
+    .p-controls { justify-content: flex-start; }
+    body.has-player { padding-bottom: 136px; }
+  }
   ol { padding-inline-start: 20px; color: var(--muted); font-size: 15px; }
   ol li { margin: 6px 0; }
   footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 13px; }
@@ -59,6 +170,16 @@
 </style>
 </head>
 <body>
+<svg class="icons" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="M18 5h-2v14h2zM6 5v14l9-7z"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M6 5h2v14H6zm12 0v14l-9-7z"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M11.5 8c2.65 0 5.05.99 6.9 2.6L22 7v9h-9l3.62-3.62c-1.39-1.16-3.16-1.88-5.12-1.88-3.54 0-6.55 2.31-7.6 5.5l-2.37-.78C2.92 11.03 6.85 8 11.5 8z"/></symbol>
+  <symbol id="i-fwd" viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M11 4h2v9.2l3.1-3.1 1.4 1.4L12 17l-5.5-5.5 1.4-1.4L11 13.2z"/><path d="M5 19h14v2H5z"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12 19 17.6 17.6 19 12 13.4 6.4 19 5 17.6 10.6 12 5 6.4z"/></symbol>
+</svg>
 <main>
   <header>
     <div class="kicker">أرشيف صوتي · ٢٠٢٦</div>
@@ -72,6 +193,7 @@
       <h2>أرشيف الراوي فواز الغسلان</h2>
       <p>قصص وقصائد وأمثال من التراث العربي بصوت الراوي فواز الغسلان، مجموعة في عشر سلاسل مرتّبة.</p>
       <div class="meta">١٩٩ حلقة · ١٩ س ٢٩ د · ١٠ سلاسل</div>
+      <a class="button listen-jump" href="#listen" data-listen="main"><svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"/></svg>استمع على الموقع</a>
       <div class="feed">
         <code id="feed-main">https://itzfaisal.github.io/alrawie/feed.xml</code>
         <button type="button" onclick="copyFeed('main', this)">انسخ الرابط</button>
@@ -89,6 +211,7 @@
       <h2>فواز الغسلان — الكاسيتات الكاملة</h2>
       <p>اثنا عشر كاسيتًا كاملًا لتسجيلات الراوي فواز الغسلان، دون تقطيع، على ترتيب الشريط الأصلي.</p>
       <div class="meta">١٢ كاسيت · ١٤ س ٢٨ د · سلسلة واحدة</div>
+      <a class="button listen-jump" href="#listen" data-listen="kasayet"><svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"/></svg>استمع على الموقع</a>
       <div class="feed">
         <code id="feed-kasayet">https://itzfaisal.github.io/alrawie/kasayet/feed.xml</code>
         <button type="button" onclick="copyFeed('kasayet', this)">انسخ الرابط</button>
@@ -103,9 +226,299 @@
     </section>
   </div>
 
-  <h2 style="margin:44px 0 10px;font-size:20px">كيف تشترك؟</h2>
+  <section class="listen" id="listen">
+    <h2>استمع الآن</h2>
+    <p class="hint">اختر سلسلة ثم حلقة ليبدأ التشغيل فورًا في المشغّل أسفل الصفحة، دون تطبيق بودكاست. يمكنك البحث في العناوين والتنقّل بين الحلقات.</p>
+    <div class="tabs" role="tablist" aria-label="اختر البرنامج">
+      <button type="button" role="tab" id="tab-main" aria-controls="panel-main" aria-selected="true" tabindex="0" data-key="main">الحلقات المفردة</button>
+      <button type="button" role="tab" id="tab-kasayet" aria-controls="panel-kasayet" aria-selected="false" tabindex="-1" data-key="kasayet">الكاسيتات الكاملة</button>
+    </div>
+    <div class="panel" id="panel-main" role="tabpanel" aria-labelledby="tab-main" data-key="main" data-title="أرشيف الراوي فواز الغسلان" data-cover="cover.jpg">
+      <label class="search">
+        <span class="sr-only">ابحث في العناوين</span>
+        <input type="search" placeholder="ابحث في عناوين الحلقات…" autocomplete="off">
+      </label>
+      <p class="no-results" hidden>لا توجد حلقات مطابقة.</p>
+      <details class="season">
+        <summary><span class="season-name">الموسوعة الشعرية</span><span class="season-meta">٥٤ حلقة · ٣ س ٥٦ د</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 9.6 12 14.2l4.6-4.6L18 11l-6 6-6-6z"/></svg></summary>
+        <ol class="episodes">
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/c73PLyRFnrY.m4a" data-id="c73PLyRFnrY" data-title="من الاستشارك لا تباديه بشاور ومن لا يودك سعد عينك فراقه" data-series="الموسوعة الشعرية" data-number="1" data-duration="183"><span class="ep-num">١</span><span class="ep-name">من الاستشارك لا تباديه بشاور ومن لا يودك سعد عينك فراقه</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/1ATQrVj45PY.m4a" data-id="1ATQrVj45PY" data-title="قصة الجربوع" data-series="الموسوعة الشعرية" data-number="2" data-duration="184"><span class="ep-num">٢</span><span class="ep-name">قصة الجربوع</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/0K-r9A2na7o.m4a" data-id="0K-r9A2na7o" data-title="قصيدة الله من هم بروحي سهجها" data-series="الموسوعة الشعرية" data-number="3" data-duration="182"><span class="ep-num">٣</span><span class="ep-name">قصيدة الله من هم بروحي سهجها</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/0FRzvwajTLk.m4a" data-id="0FRzvwajTLk" data-title="قصيدة يقول الجبرتي رد زين المثايل ورد المثايل بالحروف تعيب" data-series="الموسوعة الشعرية" data-number="4" data-duration="183"><span class="ep-num">٤</span><span class="ep-name">قصيدة يقول الجبرتي رد زين المثايل ورد المثايل بالحروف تعيب</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/vDezBfrBsqo.m4a" data-id="vDezBfrBsqo" data-title="قصة صياح المرتعد" data-series="الموسوعة الشعرية" data-number="5" data-duration="344"><span class="ep-num">٥</span><span class="ep-name">قصة صياح المرتعد</span><span class="ep-time">٥:٤٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/fHrhHL73EXg.m4a" data-id="fHrhHL73EXg" data-title="قصة لاجل الكرم بناء حوطتيني" data-series="الموسوعة الشعرية" data-number="6" data-duration="184"><span class="ep-num">٦</span><span class="ep-name">قصة لاجل الكرم بناء حوطتيني</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/VYAuGMjwfC8.m4a" data-id="VYAuGMjwfC8" data-title="بنت السليطي ندمت على اللي طاعها في وصاياه" data-series="الموسوعة الشعرية" data-number="7" data-duration="182"><span class="ep-num">٧</span><span class="ep-name">بنت السليطي ندمت على اللي طاعها في وصاياه</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/3UW1pdFWT7o.m4a" data-id="3UW1pdFWT7o" data-title="قصة وقصيدة عن سواء الأختلاف" data-series="الموسوعة الشعرية" data-number="8" data-duration="184"><span class="ep-num">٨</span><span class="ep-name">قصة وقصيدة عن سواء الأختلاف</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/MvrJ7478Pnw.m4a" data-id="MvrJ7478Pnw" data-title="قصيدة ما هم خافين الرجال الشجاعه ودي بهم بس المناعير صلفين" data-series="الموسوعة الشعرية" data-number="9" data-duration="182"><span class="ep-num">٩</span><span class="ep-name">قصيدة ما هم خافين الرجال الشجاعه ودي بهم بس المناعير صلفين</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/S9CIL6S30gs.m4a" data-id="S9CIL6S30gs" data-title="قصة الشلقان لخويهم" data-series="الموسوعة الشعرية" data-number="10" data-duration="184"><span class="ep-num">١٠</span><span class="ep-name">قصة الشلقان لخويهم</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/CIC2Qs270a0.m4a" data-id="CIC2Qs270a0" data-title="قصة صفوق الجربا وخلف ابن دعيجا" data-series="الموسوعة الشعرية" data-number="11" data-duration="184"><span class="ep-num">١١</span><span class="ep-name">قصة صفوق الجربا وخلف ابن دعيجا</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/l1hRknnIVPg.m4a" data-id="l1hRknnIVPg" data-title="قصة قصيدة يا جماعه كيف ما فيكم حميه" data-series="الموسوعة الشعرية" data-number="12" data-duration="187"><span class="ep-num">١٢</span><span class="ep-name">قصة قصيدة يا جماعه كيف ما فيكم حميه</span><span class="ep-time">٣:٠٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/W1ofo1GuOE8.m4a" data-id="W1ofo1GuOE8" data-title="قصة شرف الخصومة" data-series="الموسوعة الشعرية" data-number="13" data-duration="331"><span class="ep-num">١٣</span><span class="ep-name">قصة شرف الخصومة</span><span class="ep-time">٥:٣١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/YtWSiV7mJnE.m4a" data-id="YtWSiV7mJnE" data-title="قصة عمران البجيدي والدخيل" data-series="الموسوعة الشعرية" data-number="14" data-duration="184"><span class="ep-num">١٤</span><span class="ep-name">قصة عمران البجيدي والدخيل</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/kMHa9Ywh0oQ.m4a" data-id="kMHa9Ywh0oQ" data-title="قصة حمد بن عيده والسجين" data-series="الموسوعة الشعرية" data-number="15" data-duration="257"><span class="ep-num">١٥</span><span class="ep-name">قصة حمد بن عيده والسجين</span><span class="ep-time">٤:١٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/BxfqVwAlOQA.m4a" data-id="BxfqVwAlOQA" data-title="الموسوعة الشعريه المقدمه والشرح" data-series="الموسوعة الشعرية" data-number="16" data-duration="274"><span class="ep-num">١٦</span><span class="ep-name">الموسوعة الشعريه المقدمه والشرح</span><span class="ep-time">٤:٣٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/Ln7HxFqFzk8.m4a" data-id="Ln7HxFqFzk8" data-title="قصة قصيدة سلطان أبن جلعود" data-series="الموسوعة الشعرية" data-number="17" data-duration="186"><span class="ep-num">١٧</span><span class="ep-name">قصة قصيدة سلطان أبن جلعود</span><span class="ep-time">٣:٠٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/5nqg9yjNDVo.m4a" data-id="5nqg9yjNDVo" data-title="قصيدة يا علي خلي العيد لام الدناديش اللي تغسل كل يوم جسدها" data-series="الموسوعة الشعرية" data-number="18" data-duration="182"><span class="ep-num">١٨</span><span class="ep-name">قصيدة يا علي خلي العيد لام الدناديش اللي تغسل كل يوم جسدها</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/uamlUfZicoU.m4a" data-id="uamlUfZicoU" data-title="قصة ألم شالح ابن هدلان" data-series="الموسوعة الشعرية" data-number="19" data-duration="185"><span class="ep-num">١٩</span><span class="ep-name">قصة ألم شالح ابن هدلان</span><span class="ep-time">٣:٠٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/HIT5gyoI4Ms.m4a" data-id="HIT5gyoI4Ms" data-title="قصة وفا الأبناء الآباء" data-series="الموسوعة الشعرية" data-number="20" data-duration="184"><span class="ep-num">٢٠</span><span class="ep-name">قصة وفا الأبناء الآباء</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/lyljOQPHmew.m4a" data-id="lyljOQPHmew" data-title="قصة توصيف القبائل سعدون العريعر" data-series="الموسوعة الشعرية" data-number="21" data-duration="289"><span class="ep-num">٢١</span><span class="ep-name">قصة توصيف القبائل سعدون العريعر</span><span class="ep-time">٤:٤٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/4CtInRsQvus.m4a" data-id="4CtInRsQvus" data-title="قصة المغامسي مع فهد الغسلان" data-series="الموسوعة الشعرية" data-number="22" data-duration="450"><span class="ep-num">٢٢</span><span class="ep-name">قصة المغامسي مع فهد الغسلان</span><span class="ep-time">٧:٣٠</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/kbO71kRCGGs.m4a" data-id="kbO71kRCGGs" data-title="قصة ضيف أبن سعيد الشمري" data-series="الموسوعة الشعرية" data-number="23" data-duration="186"><span class="ep-num">٢٣</span><span class="ep-name">قصة ضيف أبن سعيد الشمري</span><span class="ep-time">٣:٠٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/hIun07lE1Ww.m4a" data-id="hIun07lE1Ww" data-title="قصة خلف أبن ناحل الحربي" data-series="الموسوعة الشعرية" data-number="24" data-duration="183"><span class="ep-num">٢٤</span><span class="ep-name">قصة خلف أبن ناحل الحربي</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/CqpEn_xzohw.m4a" data-id="CqpEn_xzohw" data-title="قصة جار فايز الودعاني" data-series="الموسوعة الشعرية" data-number="25" data-duration="184"><span class="ep-num">٢٥</span><span class="ep-name">قصة جار فايز الودعاني</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/AxpGMG5a3UA.m4a" data-id="AxpGMG5a3UA" data-title="الموسوعة الشعرية — القسم 1" data-series="الموسوعة الشعرية" data-number="26" data-duration="237"><span class="ep-num">٢٦</span><span class="ep-name">الموسوعة الشعرية — القسم 1</span><span class="ep-time">٣:٥٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/yvxRKfetSUE.m4a" data-id="yvxRKfetSUE" data-title="قصة ضيوف حمد البلوي" data-series="الموسوعة الشعرية" data-number="27" data-duration="184"><span class="ep-num">٢٧</span><span class="ep-name">قصة ضيوف حمد البلوي</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/yf_MLOGyNbQ.m4a" data-id="yf_MLOGyNbQ" data-title="قصة سليمان والجار الزهراني" data-series="الموسوعة الشعرية" data-number="28" data-duration="330"><span class="ep-num">٢٨</span><span class="ep-name">قصة سليمان والجار الزهراني</span><span class="ep-time">٥:٣٠</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/eDFVJnU_VHA.m4a" data-id="eDFVJnU_VHA" data-title="قصة آبا الظلعان الريس" data-series="الموسوعة الشعرية" data-number="29" data-duration="184"><span class="ep-num">٢٩</span><span class="ep-name">قصة آبا الظلعان الريس</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/Z5BZlXVN4U8.m4a" data-id="Z5BZlXVN4U8" data-title="قصة أبن مهيد مصوت بالعشاء" data-series="الموسوعة الشعرية" data-number="30" data-duration="183"><span class="ep-num">٣٠</span><span class="ep-name">قصة أبن مهيد مصوت بالعشاء</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/Q0AMichi6M0.m4a" data-id="Q0AMichi6M0" data-title="قصيدة حمد الغيهبان المري" data-series="الموسوعة الشعرية" data-number="31" data-duration="212"><span class="ep-num">٣١</span><span class="ep-name">قصيدة حمد الغيهبان المري</span><span class="ep-time">٣:٣٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/Cp5nD74q74Q.m4a" data-id="Cp5nD74q74Q" data-title="قصة ماجد الحثربي والسويط" data-series="الموسوعة الشعرية" data-number="32" data-duration="289"><span class="ep-num">٣٢</span><span class="ep-name">قصة ماجد الحثربي والسويط</span><span class="ep-time">٤:٤٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/YS7bBFFyUGE.m4a" data-id="YS7bBFFyUGE" data-title="قصيدة داج الظلام انزاح والنور له ضوح" data-series="الموسوعة الشعرية" data-number="33" data-duration="182"><span class="ep-num">٣٣</span><span class="ep-name">قصيدة داج الظلام انزاح والنور له ضوح</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/IE3gxSybACs.m4a" data-id="IE3gxSybACs" data-title="قصيدة الموسوعة الشعرية" data-series="الموسوعة الشعرية" data-number="34" data-duration="1672"><span class="ep-num">٣٤</span><span class="ep-name">قصيدة الموسوعة الشعرية</span><span class="ep-time">٢٧:٥٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/p-7r39P68FQ.m4a" data-id="p-7r39P68FQ" data-title="قصة راعي جفيفة" data-series="الموسوعة الشعرية" data-number="35" data-duration="620"><span class="ep-num">٣٥</span><span class="ep-name">قصة راعي جفيفة</span><span class="ep-time">١٠:٢٠</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/mZT5VLF59q4.m4a" data-id="mZT5VLF59q4" data-title="قصة جديع ابن قبلان الملحم" data-series="الموسوعة الشعرية" data-number="36" data-duration="340"><span class="ep-num">٣٦</span><span class="ep-name">قصة جديع ابن قبلان الملحم</span><span class="ep-time">٥:٤٠</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/XJHFL0Kt6_0.m4a" data-id="XJHFL0Kt6_0" data-title="قصة صنيتان أبن سويط" data-series="الموسوعة الشعرية" data-number="37" data-duration="187"><span class="ep-num">٣٧</span><span class="ep-name">قصة صنيتان أبن سويط</span><span class="ep-time">٣:٠٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/wQ93YQ9xZvw.m4a" data-id="wQ93YQ9xZvw" data-title="قصة بريك الاسعدي وعدوان أبن طوالة" data-series="الموسوعة الشعرية" data-number="38" data-duration="210"><span class="ep-num">٣٨</span><span class="ep-name">قصة بريك الاسعدي وعدوان أبن طوالة</span><span class="ep-time">٣:٣٠</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/-bON2cDOtMM.m4a" data-id="-bON2cDOtMM" data-title="قصيدة انا ويش اسوي في زماني يابن نماس" data-series="الموسوعة الشعرية" data-number="39" data-duration="183"><span class="ep-num">٣٩</span><span class="ep-name">قصيدة انا ويش اسوي في زماني يابن نماس</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/cdDIkywJYNo.m4a" data-id="cdDIkywJYNo" data-title="قصة الذيب راشد العجمي" data-series="الموسوعة الشعرية" data-number="40" data-duration="236"><span class="ep-num">٤٠</span><span class="ep-name">قصة الذيب راشد العجمي</span><span class="ep-time">٣:٥٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/bXXfs0ztvPo.m4a" data-id="bXXfs0ztvPo" data-title="قصة محمد أبن سمير مع الدخيل" data-series="الموسوعة الشعرية" data-number="41" data-duration="184"><span class="ep-num">٤١</span><span class="ep-name">قصة محمد أبن سمير مع الدخيل</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/rPBslQF3US8.m4a" data-id="rPBslQF3US8" data-title="قصيدة خضير الصعليك" data-series="الموسوعة الشعرية" data-number="42" data-duration="304"><span class="ep-num">٤٢</span><span class="ep-name">قصيدة خضير الصعليك</span><span class="ep-time">٥:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/Lten6ibmlQM.m4a" data-id="Lten6ibmlQM" data-title="قصة نزهت جريس مع الجاره" data-series="الموسوعة الشعرية" data-number="43" data-duration="185"><span class="ep-num">٤٣</span><span class="ep-name">قصة نزهت جريس مع الجاره</span><span class="ep-time">٣:٠٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/5Q4uGCMNcxE.m4a" data-id="5Q4uGCMNcxE" data-title="قصة الجار عند قبيلة عنزة" data-series="الموسوعة الشعرية" data-number="44" data-duration="191"><span class="ep-num">٤٤</span><span class="ep-name">قصة الجار عند قبيلة عنزة</span><span class="ep-time">٣:١١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/MGYATj_sdDE.m4a" data-id="MGYATj_sdDE" data-title="قصة عقوب أبن سويط" data-series="الموسوعة الشعرية" data-number="45" data-duration="184"><span class="ep-num">٤٥</span><span class="ep-name">قصة عقوب أبن سويط</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/3lTIVDGElrI.m4a" data-id="3lTIVDGElrI" data-title="قصة حسين ابن حنيبيص" data-series="الموسوعة الشعرية" data-number="46" data-duration="184"><span class="ep-num">٤٦</span><span class="ep-name">قصة حسين ابن حنيبيص</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/N_GW9T_cTxE.m4a" data-id="N_GW9T_cTxE" data-title="قصة مفرج السبيعي والمهادي" data-series="الموسوعة الشعرية" data-number="47" data-duration="783"><span class="ep-num">٤٧</span><span class="ep-name">قصة مفرج السبيعي والمهادي</span><span class="ep-time">١٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/5UBIiVGy70o.m4a" data-id="5UBIiVGy70o" data-title="الدهلويه تتغزل بجديع الهذال" data-series="الموسوعة الشعرية" data-number="48" data-duration="194"><span class="ep-num">٤٨</span><span class="ep-name">الدهلويه تتغزل بجديع الهذال</span><span class="ep-time">٣:١٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/2VUXo1cWX84.m4a" data-id="2VUXo1cWX84" data-title="قصة حسرت ولوعة سليمان الصويغ" data-series="الموسوعة الشعرية" data-number="49" data-duration="283"><span class="ep-num">٤٩</span><span class="ep-name">قصة حسرت ولوعة سليمان الصويغ</span><span class="ep-time">٤:٤٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/Xf5ws4yAEhY.m4a" data-id="Xf5ws4yAEhY" data-title="قصة قصيدة مع أخيه" data-series="الموسوعة الشعرية" data-number="50" data-duration="217"><span class="ep-num">٥٠</span><span class="ep-name">قصة قصيدة مع أخيه</span><span class="ep-time">٣:٣٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/SmTdR0hFW8Y.m4a" data-id="SmTdR0hFW8Y" data-title="قصة فزعة سعود الصعيدي" data-series="الموسوعة الشعرية" data-number="51" data-duration="220"><span class="ep-num">٥١</span><span class="ep-name">قصة فزعة سعود الصعيدي</span><span class="ep-time">٣:٤٠</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/9LZH2AfgkCQ.m4a" data-id="9LZH2AfgkCQ" data-title="ضويهره الشراريه" data-series="الموسوعة الشعرية" data-number="52" data-duration="182"><span class="ep-num">٥٢</span><span class="ep-name">ضويهره الشراريه</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/YKHNRgka2i8.m4a" data-id="YKHNRgka2i8" data-title="قصة الشيخ جاسم ابن عضيب القحطاني" data-series="الموسوعة الشعرية" data-number="53" data-duration="184"><span class="ep-num">٥٣</span><span class="ep-name">قصة الشيخ جاسم ابن عضيب القحطاني</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-sheriya/QpBHrevJKHE.m4a" data-id="QpBHrevJKHE" data-title="قصيدة ان طبت يا راسي كسيتك عمامه" data-series="الموسوعة الشعرية" data-number="54" data-duration="184"><span class="ep-num">٥٤</span><span class="ep-name">قصيدة ان طبت يا راسي كسيتك عمامه</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+        </ol>
+      </details>
+      <details class="season">
+        <summary><span class="season-name">نوادر من التراث</span><span class="season-meta">٤٧ حلقة · ٧ س ١ د</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 9.6 12 14.2l4.6-4.6L18 11l-6 6-6-6z"/></svg></summary>
+        <ol class="episodes">
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/CfzAo193oQQ.m4a" data-id="CfzAo193oQQ" data-title="قصة وقصيدة حجرف الذويبي" data-series="نوادر من التراث" data-number="1" data-duration="1157"><span class="ep-num">١</span><span class="ep-name">قصة وقصيدة حجرف الذويبي</span><span class="ep-time">١٩:١٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/gLLLXADdafo.m4a" data-id="gLLLXADdafo" data-title="قصة وقصيدة المرأة الشمرية" data-series="نوادر من التراث" data-number="2" data-duration="307"><span class="ep-num">٢</span><span class="ep-name">قصة وقصيدة المرأة الشمرية</span><span class="ep-time">٥:٠٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/cIS5CBicv1o.m4a" data-id="cIS5CBicv1o" data-title="قصة وقصيده الذئب الذي اتى بيت مكازي ابن سعيد" data-series="نوادر من التراث" data-number="3" data-duration="298"><span class="ep-num">٣</span><span class="ep-name">قصة وقصيده الذئب الذي اتى بيت مكازي ابن سعيد</span><span class="ep-time">٤:٥٨</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/EegGD6s-9RU.m4a" data-id="EegGD6s-9RU" data-title="قصه وقصيده ابن بليهد" data-series="نوادر من التراث" data-number="4" data-duration="256"><span class="ep-num">٤</span><span class="ep-name">قصه وقصيده ابن بليهد</span><span class="ep-time">٤:١٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/wmGxLmwNXLA.m4a" data-id="wmGxLmwNXLA" data-title="قصة وقصيدة ملحمة قبيلة سبيع فالح ابن حثلان السبيعي" data-series="نوادر من التراث" data-number="5" data-duration="1048"><span class="ep-num">٥</span><span class="ep-name">قصة وقصيدة ملحمة قبيلة سبيع فالح ابن حثلان السبيعي</span><span class="ep-time">١٧:٢٨</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/tRKtE6UQpnI.m4a" data-id="tRKtE6UQpnI" data-title="قصة وقصيدة محمد المهادي والجار مفرج السبيعي" data-series="نوادر من التراث" data-number="6" data-duration="786"><span class="ep-num">٦</span><span class="ep-name">قصة وقصيدة محمد المهادي والجار مفرج السبيعي</span><span class="ep-time">١٣:٠٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/aVquirCnnlc.m4a" data-id="aVquirCnnlc" data-title="قصص وقصائد بني تميم" data-series="نوادر من التراث" data-number="7" data-duration="410"><span class="ep-num">٧</span><span class="ep-name">قصص وقصائد بني تميم</span><span class="ep-time">٦:٥٠</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/P9xzvrBCl1o.m4a" data-id="P9xzvrBCl1o" data-title="فزعة حاكم نجد محمد العبدالله العلي الرشيد" data-series="نوادر من التراث" data-number="8" data-duration="247"><span class="ep-num">٨</span><span class="ep-name">فزعة حاكم نجد محمد العبدالله العلي الرشيد</span><span class="ep-time">٤:٠٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/pK70sQnBa_Q.m4a" data-id="pK70sQnBa_Q" data-title="قصة وقصيدة مرثية بريك الاسعدي راعي بقعاء" data-series="نوادر من التراث" data-number="9" data-duration="192"><span class="ep-num">٩</span><span class="ep-name">قصة وقصيدة مرثية بريك الاسعدي راعي بقعاء</span><span class="ep-time">٣:١٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/ZKY3wYV2SAs.m4a" data-id="ZKY3wYV2SAs" data-title="قصة وقصيدة شالح ابن هدلان" data-series="نوادر من التراث" data-number="10" data-duration="555"><span class="ep-num">١٠</span><span class="ep-name">قصة وقصيدة شالح ابن هدلان</span><span class="ep-time">٩:١٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/06YgZVBNY3M.m4a" data-id="06YgZVBNY3M" data-title="قصة وقصيدة وضحى بنت عواد الجنفاوي" data-series="نوادر من التراث" data-number="11" data-duration="236"><span class="ep-num">١١</span><span class="ep-name">قصة وقصيدة وضحى بنت عواد الجنفاوي</span><span class="ep-time">٣:٥٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/ir68JoBEpkA.m4a" data-id="ir68JoBEpkA" data-title="قصة وقصيدة جحيش السرحاني عندما دعا على أولاده عقوق الأبناء" data-series="نوادر من التراث" data-number="12" data-duration="872"><span class="ep-num">١٢</span><span class="ep-name">قصة وقصيدة جحيش السرحاني عندما دعا على أولاده عقوق الأبناء</span><span class="ep-time">١٤:٣٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/7e2pQ5ilkos.m4a" data-id="7e2pQ5ilkos" data-title="قصه وقصيده ثامر راضي الشلاقي" data-series="نوادر من التراث" data-number="13" data-duration="183"><span class="ep-num">١٣</span><span class="ep-name">قصه وقصيده ثامر راضي الشلاقي</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/sosejP5usP4.m4a" data-id="sosejP5usP4" data-title="قصيدة العنود والأختلافات" data-series="نوادر من التراث" data-number="14" data-duration="697"><span class="ep-num">١٤</span><span class="ep-name">قصيدة العنود والأختلافات</span><span class="ep-time">١١:٣٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/wGLBPLOb-qA.m4a" data-id="wGLBPLOb-qA" data-title="قصة هيا بنت عيادة الحربي" data-series="نوادر من التراث" data-number="15" data-duration="373"><span class="ep-num">١٥</span><span class="ep-name">قصة هيا بنت عيادة الحربي</span><span class="ep-time">٦:١٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/F9KuUwG4bEM.m4a" data-id="F9KuUwG4bEM" data-title="قصة عمران البجيدي والدخيل الذي قتل ابنه" data-series="نوادر من التراث" data-number="16" data-duration="305"><span class="ep-num">١٦</span><span class="ep-name">قصة عمران البجيدي والدخيل الذي قتل ابنه</span><span class="ep-time">٥:٠٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/2YtxOr8Q-0g.m4a" data-id="2YtxOr8Q-0g" data-title="قصه وقصيده مرضى الأقعام الشلاقي" data-series="نوادر من التراث" data-number="17" data-duration="222"><span class="ep-num">١٧</span><span class="ep-name">قصه وقصيده مرضى الأقعام الشلاقي</span><span class="ep-time">٣:٤٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/swRbCH7RONI.m4a" data-id="swRbCH7RONI" data-title="قصة قصيدة القهوه فهد الغسلان" data-series="نوادر من التراث" data-number="18" data-duration="285"><span class="ep-num">١٨</span><span class="ep-name">قصة قصيدة القهوه فهد الغسلان</span><span class="ep-time">٤:٤٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/fmnYIAD0cbY.m4a" data-id="fmnYIAD0cbY" data-title="قصه وقصيده سمير ابن زيدان الجربا" data-series="نوادر من التراث" data-number="19" data-duration="652"><span class="ep-num">١٩</span><span class="ep-name">قصه وقصيده سمير ابن زيدان الجربا</span><span class="ep-time">١٠:٥٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/SoXmTRSlmL8.m4a" data-id="SoXmTRSlmL8" data-title="قصه وقصيده وصف السيارات الشاعر عايد الذرفي" data-series="نوادر من التراث" data-number="20" data-duration="185"><span class="ep-num">٢٠</span><span class="ep-name">قصه وقصيده وصف السيارات الشاعر عايد الذرفي</span><span class="ep-time">٣:٠٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/SzmqmXh_Ay0.m4a" data-id="SzmqmXh_Ay0" data-title="قصه ابن عشوي القحطاني مع زوجات ابنائه" data-series="نوادر من التراث" data-number="21" data-duration="241"><span class="ep-num">٢١</span><span class="ep-name">قصه ابن عشوي القحطاني مع زوجات ابنائه</span><span class="ep-time">٤:٠١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/o2S3q_Pno2A.m4a" data-id="o2S3q_Pno2A" data-title="قصه ماجد الحثربي ومفوز التجغيف" data-series="نوادر من التراث" data-number="22" data-duration="821"><span class="ep-num">٢٢</span><span class="ep-name">قصه ماجد الحثربي ومفوز التجغيف</span><span class="ep-time">١٣:٤١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/ngK2PlsLIXQ.m4a" data-id="ngK2PlsLIXQ" data-title="قصة وقصيدة أبن غيث الشمري" data-series="نوادر من التراث" data-number="23" data-duration="756"><span class="ep-num">٢٣</span><span class="ep-name">قصة وقصيدة أبن غيث الشمري</span><span class="ep-time">١٢:٣٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/LLrFy7QWq48.m4a" data-id="LLrFy7QWq48" data-title="قصة صفوق الجربا وخلف ابن دعيجا وسمير الصبيحي" data-series="نوادر من التراث" data-number="24" data-duration="2625"><span class="ep-num">٢٤</span><span class="ep-name">قصة صفوق الجربا وخلف ابن دعيجا وسمير الصبيحي</span><span class="ep-time">٤٣:٤٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/gDhnKiKcu2s.m4a" data-id="gDhnKiKcu2s" data-title="قصه وقصيده ابن سراح في مدينه البلقاء" data-series="نوادر من التراث" data-number="25" data-duration="805"><span class="ep-num">٢٥</span><span class="ep-name">قصه وقصيده ابن سراح في مدينه البلقاء</span><span class="ep-time">١٣:٢٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/Wuhu39KJvC8.m4a" data-id="Wuhu39KJvC8" data-title="قصة وقصيدة فايز ابن هذيل" data-series="نوادر من التراث" data-number="26" data-duration="215"><span class="ep-num">٢٦</span><span class="ep-name">قصة وقصيدة فايز ابن هذيل</span><span class="ep-time">٣:٣٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/c12qe9WNJSg.m4a" data-id="c12qe9WNJSg" data-title="قصة وقصيدة وفاه زوجة الشريف شكر" data-series="نوادر من التراث" data-number="27" data-duration="227"><span class="ep-num">٢٧</span><span class="ep-name">قصة وقصيدة وفاه زوجة الشريف شكر</span><span class="ep-time">٣:٤٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/TZGj5Vd3C-o.m4a" data-id="TZGj5Vd3C-o" data-title="قصص وقصيد راشد الخلاوي" data-series="نوادر من التراث" data-number="28" data-duration="1174"><span class="ep-num">٢٨</span><span class="ep-name">قصص وقصيد راشد الخلاوي</span><span class="ep-time">١٩:٣٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/bFt7TOayyNg.m4a" data-id="bFt7TOayyNg" data-title="قصه صنيتان السويط والجار منديل الخالدي" data-series="نوادر من التراث" data-number="29" data-duration="460"><span class="ep-num">٢٩</span><span class="ep-name">قصه صنيتان السويط والجار منديل الخالدي</span><span class="ep-time">٧:٤٠</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/B-RxyHwc7X8.m4a" data-id="B-RxyHwc7X8" data-title="قصة وقصيدة مفضي أبن ولمان الحربي" data-series="نوادر من التراث" data-number="30" data-duration="206"><span class="ep-num">٣٠</span><span class="ep-name">قصة وقصيدة مفضي أبن ولمان الحربي</span><span class="ep-time">٣:٢٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/OtWUnyGiR58.m4a" data-id="OtWUnyGiR58" data-title="قصة وقصيدة مرشد التميمي" data-series="نوادر من التراث" data-number="31" data-duration="959"><span class="ep-num">٣١</span><span class="ep-name">قصة وقصيدة مرشد التميمي</span><span class="ep-time">١٥:٥٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/HtGofWwUnck.m4a" data-id="HtGofWwUnck" data-title="قصة قصيدة مجيدع الربوض غزوتهم المعروفه بشيلة الشلقان لخويهم" data-series="نوادر من التراث" data-number="32" data-duration="1005"><span class="ep-num">٣٢</span><span class="ep-name">قصة قصيدة مجيدع الربوض غزوتهم المعروفه بشيلة الشلقان لخويهم</span><span class="ep-time">١٦:٤٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/MHni5MFk7Yg.m4a" data-id="MHni5MFk7Yg" data-title="قصيدة شيخة قبيلة مره — ابو حمزه العامري المري" data-series="نوادر من التراث" data-number="33" data-duration="372"><span class="ep-num">٣٣</span><span class="ep-name">قصيدة شيخة قبيلة مره — ابو حمزه العامري المري</span><span class="ep-time">٦:١٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/ICBZf9Y2QKQ.m4a" data-id="ICBZf9Y2QKQ" data-title="قصيدة شيخة قبيلة شمر — عدوان الهربيد" data-series="نوادر من التراث" data-number="34" data-duration="280"><span class="ep-num">٣٤</span><span class="ep-name">قصيدة شيخة قبيلة شمر — عدوان الهربيد</span><span class="ep-time">٤:٤٠</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/ePbANqiIu9s.m4a" data-id="ePbANqiIu9s" data-title="قصه وقصيده ابن جلعود راعي سميره" data-series="نوادر من التراث" data-number="35" data-duration="184"><span class="ep-num">٣٥</span><span class="ep-name">قصه وقصيده ابن جلعود راعي سميره</span><span class="ep-time">٣:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/oDeXta9O9as.m4a" data-id="oDeXta9O9as" data-title="ملحمة قبيلة عنزة قصيدة بنت الأهرام" data-series="نوادر من التراث" data-number="36" data-duration="815"><span class="ep-num">٣٦</span><span class="ep-name">ملحمة قبيلة عنزة قصيدة بنت الأهرام</span><span class="ep-time">١٣:٣٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/vl9l1rPXe0U.m4a" data-id="vl9l1rPXe0U" data-title="قصائد وصف السيارات أبناء الجميلي" data-series="نوادر من التراث" data-number="37" data-duration="375"><span class="ep-num">٣٧</span><span class="ep-name">قصائد وصف السيارات أبناء الجميلي</span><span class="ep-time">٦:١٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/IvvqCCSNPx4.m4a" data-id="IvvqCCSNPx4" data-title="من قصص وقصائد حق الصداقه" data-series="نوادر من التراث" data-number="38" data-duration="580"><span class="ep-num">٣٨</span><span class="ep-name">من قصص وقصائد حق الصداقه</span><span class="ep-time">٩:٤٠</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/27U7Vf1Tt10.m4a" data-id="27U7Vf1Tt10" data-title="قصيدة شيخة قبيلة عتيبة — بديوي الوقداني" data-series="نوادر من التراث" data-number="39" data-duration="481"><span class="ep-num">٣٩</span><span class="ep-name">قصيدة شيخة قبيلة عتيبة — بديوي الوقداني</span><span class="ep-time">٨:٠١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/l-5TNhCR97k.m4a" data-id="l-5TNhCR97k" data-title="قصه وقصيده الضب الشاعر عايد الذرفي" data-series="نوادر من التراث" data-number="40" data-duration="198"><span class="ep-num">٤٠</span><span class="ep-name">قصه وقصيده الضب الشاعر عايد الذرفي</span><span class="ep-time">٣:١٨</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/i9SJvO4Jsb8.m4a" data-id="i9SJvO4Jsb8" data-title="من قصص مفاخر العرب — قصه صياح المرتعد" data-series="نوادر من التراث" data-number="41" data-duration="573"><span class="ep-num">٤١</span><span class="ep-name">من قصص مفاخر العرب — قصه صياح المرتعد</span><span class="ep-time">٩:٣٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/20GfSn2a68E.m4a" data-id="20GfSn2a68E" data-title="من قصص وأشعار في رثاء الإخوان" data-series="نوادر من التراث" data-number="42" data-duration="203"><span class="ep-num">٤٢</span><span class="ep-name">من قصص وأشعار في رثاء الإخوان</span><span class="ep-time">٣:٢٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/xhd2PvguHTI.m4a" data-id="xhd2PvguHTI" data-title="قصة عقيل الجنفاوي" data-series="نوادر من التراث" data-number="43" data-duration="551"><span class="ep-num">٤٣</span><span class="ep-name">قصة عقيل الجنفاوي</span><span class="ep-time">٩:١١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/h4M9GAJZOuA.m4a" data-id="h4M9GAJZOuA" data-title="من قصص وقصائد النساء قصيدة الجميلي" data-series="نوادر من التراث" data-number="44" data-duration="419"><span class="ep-num">٤٤</span><span class="ep-name">من قصص وقصائد النساء قصيدة الجميلي</span><span class="ep-time">٦:٥٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/WYqoljr23xY.m4a" data-id="WYqoljr23xY" data-title="قصة نمر أبن عدوان وجديع ابن ملحم" data-series="نوادر من التراث" data-number="45" data-duration="275"><span class="ep-num">٤٥</span><span class="ep-name">قصة نمر أبن عدوان وجديع ابن ملحم</span><span class="ep-time">٤:٣٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/R6kzl3iGZ0E.m4a" data-id="R6kzl3iGZ0E" data-title="قصة وقصيدة أبا الظلعان" data-series="نوادر من التراث" data-number="46" data-duration="881"><span class="ep-num">٤٦</span><span class="ep-name">قصة وقصيدة أبا الظلعان</span><span class="ep-time">١٤:٤١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-nawader-min-alturath/ckTRVy5UxE4.m4a" data-id="ckTRVy5UxE4" data-title="قصيدة شيخة قبيلة عنزة — مقحم النجدي الصقري" data-series="نوادر من التراث" data-number="47" data-duration="305"><span class="ep-num">٤٧</span><span class="ep-name">قصيدة شيخة قبيلة عنزة — مقحم النجدي الصقري</span><span class="ep-time">٥:٠٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+        </ol>
+      </details>
+      <details class="season">
+        <summary><span class="season-name">جواهر الأمثال الشعبية</span><span class="season-meta">٣٧ حلقة · ٢ س ١٥ د</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 9.6 12 14.2l4.6-4.6L18 11l-6 6-6-6z"/></svg></summary>
+        <ol class="episodes">
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/vd7uouUuZ60.m4a" data-id="vd7uouUuZ60" data-title="ما ينبكي حي هواه الفراقي" data-series="جواهر الأمثال الشعبية" data-number="1" data-duration="181"><span class="ep-num">١</span><span class="ep-name">ما ينبكي حي هواه الفراقي</span><span class="ep-time">٣:٠١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/g9xnVXSrNwc.m4a" data-id="g9xnVXSrNwc" data-title="الوعد وان سيل الله كل وادي" data-series="جواهر الأمثال الشعبية" data-number="2" data-duration="182"><span class="ep-num">٢</span><span class="ep-name">الوعد وان سيل الله كل وادي</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/aBN3pxux5_8.m4a" data-id="aBN3pxux5_8" data-title="اضرب ولدك ان كان تبغيه يشفيك" data-series="جواهر الأمثال الشعبية" data-number="3" data-duration="182"><span class="ep-num">٣</span><span class="ep-name">اضرب ولدك ان كان تبغيه يشفيك</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/Ummf1Y449dA.m4a" data-id="Ummf1Y449dA" data-title="واعرف ترى سن اللبن يقلعه سن" data-series="جواهر الأمثال الشعبية" data-number="4" data-duration="181"><span class="ep-num">٤</span><span class="ep-name">واعرف ترى سن اللبن يقلعه سن</span><span class="ep-time">٣:٠١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/MwarDtCKHfo.m4a" data-id="MwarDtCKHfo" data-title="يرزقني رزاق الحيايا بجحرها" data-series="جواهر الأمثال الشعبية" data-number="5" data-duration="219"><span class="ep-num">٥</span><span class="ep-name">يرزقني رزاق الحيايا بجحرها</span><span class="ep-time">٣:٣٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/I0gkjdru_2Q.m4a" data-id="I0gkjdru_2Q" data-title="قصيدة جواهر الامثال الشعبية" data-series="جواهر الأمثال الشعبية" data-number="6" data-duration="905"><span class="ep-num">٦</span><span class="ep-name">قصيدة جواهر الامثال الشعبية</span><span class="ep-time">١٥:٠٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/1C5nljzUVJM.m4a" data-id="1C5nljzUVJM" data-title="طول الجدار وقصرت الرجل نوماس" data-series="جواهر الأمثال الشعبية" data-number="7" data-duration="182"><span class="ep-num">٧</span><span class="ep-name">طول الجدار وقصرت الرجل نوماس</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/k7g61lkLMUw.m4a" data-id="k7g61lkLMUw" data-title="أمكن تراها ما تفيد الحسايف" data-series="جواهر الأمثال الشعبية" data-number="8" data-duration="182"><span class="ep-num">٨</span><span class="ep-name">أمكن تراها ما تفيد الحسايف</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/HTskAZzEpaA.m4a" data-id="HTskAZzEpaA" data-title="واللي حصل عز مع الكيف كافي" data-series="جواهر الأمثال الشعبية" data-number="9" data-duration="181"><span class="ep-num">٩</span><span class="ep-name">واللي حصل عز مع الكيف كافي</span><span class="ep-time">٣:٠١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/bYVWXGj3LV0.m4a" data-id="bYVWXGj3LV0" data-title="العود يوم انه يجيب العيالي" data-series="جواهر الأمثال الشعبية" data-number="10" data-duration="196"><span class="ep-num">١٠</span><span class="ep-name">العود يوم انه يجيب العيالي</span><span class="ep-time">٣:١٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/4MJl98dU-_w.m4a" data-id="4MJl98dU-_w" data-title="انت تقول أهنا وانا اقول هانا" data-series="جواهر الأمثال الشعبية" data-number="11" data-duration="213"><span class="ep-num">١١</span><span class="ep-name">انت تقول أهنا وانا اقول هانا</span><span class="ep-time">٣:٣٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/ffXmUn8LbnM.m4a" data-id="ffXmUn8LbnM" data-title="رجلك إلى ضاقت محايلك سجها" data-series="جواهر الأمثال الشعبية" data-number="12" data-duration="182"><span class="ep-num">١٢</span><span class="ep-name">رجلك إلى ضاقت محايلك سجها</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/OqtGcgxgtlM.m4a" data-id="OqtGcgxgtlM" data-title="الزول زوله والحلايا حلاياه" data-series="جواهر الأمثال الشعبية" data-number="13" data-duration="181"><span class="ep-num">١٣</span><span class="ep-name">الزول زوله والحلايا حلاياه</span><span class="ep-time">٣:٠١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/LSMQerUTViQ.m4a" data-id="LSMQerUTViQ" data-title="القد ما لانت عراويه بتفال" data-series="جواهر الأمثال الشعبية" data-number="14" data-duration="214"><span class="ep-num">١٤</span><span class="ep-name">القد ما لانت عراويه بتفال</span><span class="ep-time">٣:٣٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/cmGnFMZqa5Y.m4a" data-id="cmGnFMZqa5Y" data-title="لا طاب نوم اللي حياته خساره" data-series="جواهر الأمثال الشعبية" data-number="15" data-duration="183"><span class="ep-num">١٥</span><span class="ep-name">لا طاب نوم اللي حياته خساره</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/yvZPz3X_ZKc.m4a" data-id="yvZPz3X_ZKc" data-title="ترى السوالف بأذهان الرجالي" data-series="جواهر الأمثال الشعبية" data-number="16" data-duration="181"><span class="ep-num">١٦</span><span class="ep-name">ترى السوالف بأذهان الرجالي</span><span class="ep-time">٣:٠١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/wbqtLmFaDxI.m4a" data-id="wbqtLmFaDxI" data-title="الناس تدري بالجدايد والأسمال" data-series="جواهر الأمثال الشعبية" data-number="17" data-duration="182"><span class="ep-num">١٧</span><span class="ep-name">الناس تدري بالجدايد والأسمال</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/MTW34S5fK1w.m4a" data-id="MTW34S5fK1w" data-title="يا بايع جوخ على غير اهاليه — جواهر الامثال" data-series="جواهر الأمثال الشعبية" data-number="18" data-duration="180"><span class="ep-num">١٨</span><span class="ep-name">يا بايع جوخ على غير اهاليه — جواهر الامثال</span><span class="ep-time">٣:٠٠</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/D-io1UiFPQw.m4a" data-id="D-io1UiFPQw" data-title="بذره الحساني بالحصاني وغرني" data-series="جواهر الأمثال الشعبية" data-number="19" data-duration="181"><span class="ep-num">١٩</span><span class="ep-name">بذره الحساني بالحصاني وغرني</span><span class="ep-time">٣:٠١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/IT8yIyMZc4M.m4a" data-id="IT8yIyMZc4M" data-title="الطيب يا اللي تريدونه" data-series="جواهر الأمثال الشعبية" data-number="20" data-duration="182"><span class="ep-num">٢٠</span><span class="ep-name">الطيب يا اللي تريدونه</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/fh8NxSez2vo.m4a" data-id="fh8NxSez2vo" data-title="عيب طمان النفس عقب ارتفاعه" data-series="جواهر الأمثال الشعبية" data-number="21" data-duration="227"><span class="ep-num">٢١</span><span class="ep-name">عيب طمان النفس عقب ارتفاعه</span><span class="ep-time">٣:٤٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/YsQQarSWzsQ.m4a" data-id="YsQQarSWzsQ" data-title="شمس الخيار والاضلال الفريضه" data-series="جواهر الأمثال الشعبية" data-number="22" data-duration="181"><span class="ep-num">٢٢</span><span class="ep-name">شمس الخيار والاضلال الفريضه</span><span class="ep-time">٣:٠١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/YKEc1EvYW4c.m4a" data-id="YKEc1EvYW4c" data-title="العمر ماياقاه كثر المداري" data-series="جواهر الأمثال الشعبية" data-number="23" data-duration="182"><span class="ep-num">٢٣</span><span class="ep-name">العمر ماياقاه كثر المداري</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/W6uOF4urT5Q.m4a" data-id="W6uOF4urT5Q" data-title="من طاوع الثنتين يصبر على اللوم" data-series="جواهر الأمثال الشعبية" data-number="24" data-duration="181"><span class="ep-num">٢٤</span><span class="ep-name">من طاوع الثنتين يصبر على اللوم</span><span class="ep-time">٣:٠١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/UcFnIk4H2QE.m4a" data-id="UcFnIk4H2QE" data-title="العوشزه ما ينزل الصقر فوقها" data-series="جواهر الأمثال الشعبية" data-number="25" data-duration="182"><span class="ep-num">٢٥</span><span class="ep-name">العوشزه ما ينزل الصقر فوقها</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/px2FY_nVuKw.m4a" data-id="px2FY_nVuKw" data-title="لا تاخذ الدنيا خراص وهقاوت" data-series="جواهر الأمثال الشعبية" data-number="26" data-duration="213"><span class="ep-num">٢٦</span><span class="ep-name">لا تاخذ الدنيا خراص وهقاوت</span><span class="ep-time">٣:٣٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/dT_XsBB2Wis.m4a" data-id="dT_XsBB2Wis" data-title="لو عندنا من غيب الأيام رسه" data-series="جواهر الأمثال الشعبية" data-number="27" data-duration="329"><span class="ep-num">٢٧</span><span class="ep-name">لو عندنا من غيب الأيام رسه</span><span class="ep-time">٥:٢٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/TRKYWNc5odU.m4a" data-id="TRKYWNc5odU" data-title="لا صار بالدنيا صديقك يخليك" data-series="جواهر الأمثال الشعبية" data-number="28" data-duration="182"><span class="ep-num">٢٨</span><span class="ep-name">لا صار بالدنيا صديقك يخليك</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/ka_KWbtAfB8.m4a" data-id="ka_KWbtAfB8" data-title="لا يشرب القفوات كود اهداني" data-series="جواهر الأمثال الشعبية" data-number="29" data-duration="196"><span class="ep-num">٢٩</span><span class="ep-name">لا يشرب القفوات كود اهداني</span><span class="ep-time">٣:١٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/bNWsxgwpMkY.m4a" data-id="bNWsxgwpMkY" data-title="الدار مثل البنت يكشف مغطاه" data-series="جواهر الأمثال الشعبية" data-number="30" data-duration="182"><span class="ep-num">٣٠</span><span class="ep-name">الدار مثل البنت يكشف مغطاه</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/nZ2-4-BT_BI.m4a" data-id="nZ2-4-BT_BI" data-title="ياويل قاضي الأرض من قاضي السماء" data-series="جواهر الأمثال الشعبية" data-number="31" data-duration="181"><span class="ep-num">٣١</span><span class="ep-name">ياويل قاضي الأرض من قاضي السماء</span><span class="ep-time">٣:٠١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/7s6UtniwtaA.m4a" data-id="7s6UtniwtaA" data-title="يمنى بلا يسرى تراها ضعيفه" data-series="جواهر الأمثال الشعبية" data-number="32" data-duration="182"><span class="ep-num">٣٢</span><span class="ep-name">يمنى بلا يسرى تراها ضعيفه</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/4C6gKNb9wB8.m4a" data-id="4C6gKNb9wB8" data-title="شاور على القالات صلبين الاشوار" data-series="جواهر الأمثال الشعبية" data-number="33" data-duration="185"><span class="ep-num">٣٣</span><span class="ep-name">شاور على القالات صلبين الاشوار</span><span class="ep-time">٣:٠٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/sMc89IYrbxg.m4a" data-id="sMc89IYrbxg" data-title="يبي الليان ومن لقى الين يتليه" data-series="جواهر الأمثال الشعبية" data-number="34" data-duration="413"><span class="ep-num">٣٤</span><span class="ep-name">يبي الليان ومن لقى الين يتليه</span><span class="ep-time">٦:٥٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/UbNUKCFXhEI.m4a" data-id="UbNUKCFXhEI" data-title="وقتنا به الحصني يدور الفراسه" data-series="جواهر الأمثال الشعبية" data-number="35" data-duration="256"><span class="ep-num">٣٥</span><span class="ep-name">وقتنا به الحصني يدور الفراسه</span><span class="ep-time">٤:١٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/CT9g9ld9jFw.m4a" data-id="CT9g9ld9jFw" data-title="من قال انا خير الملا ربحه العنا" data-series="جواهر الأمثال الشعبية" data-number="36" data-duration="182"><span class="ep-num">٣٦</span><span class="ep-name">من قال انا خير الملا ربحه العنا</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-jawaher-amthal-shaabiya/p03Jz7c1YMo.m4a" data-id="p03Jz7c1YMo" data-title="الظفر ما هو بس للظاعنينا" data-series="جواهر الأمثال الشعبية" data-number="37" data-duration="182"><span class="ep-num">٣٧</span><span class="ep-name">الظفر ما هو بس للظاعنينا</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+        </ol>
+      </details>
+      <details class="season">
+        <summary><span class="season-name">عاشق ومعشوق</span><span class="season-meta">٢٢ حلقة · ١ س ٩ د</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 9.6 12 14.2l4.6-4.6L18 11l-6 6-6-6z"/></svg></summary>
+        <ol class="episodes">
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/XjYwdp4nVzE.m4a" data-id="XjYwdp4nVzE" data-title="دغيم الظلماوي" data-series="عاشق ومعشوق" data-number="1" data-duration="182"><span class="ep-num">١</span><span class="ep-name">دغيم الظلماوي</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/Nz_PshPvVvo.m4a" data-id="Nz_PshPvVvo" data-title="قصه ماجد الحثربي مع ابن عريعر" data-series="عاشق ومعشوق" data-number="2" data-duration="182"><span class="ep-num">٢</span><span class="ep-name">قصه ماجد الحثربي مع ابن عريعر</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/f2K1GV23zDY.m4a" data-id="f2K1GV23zDY" data-title="قصيده علي ابن فاضل المري يمدح البندق" data-series="عاشق ومعشوق" data-number="3" data-duration="182"><span class="ep-num">٣</span><span class="ep-name">قصيده علي ابن فاضل المري يمدح البندق</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/36FCU8JxPUA.m4a" data-id="36FCU8JxPUA" data-title="كسر ساق الشيخ خلف الاذن الشعلان" data-series="عاشق ومعشوق" data-number="4" data-duration="182"><span class="ep-num">٤</span><span class="ep-name">كسر ساق الشيخ خلف الاذن الشعلان</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/USJ4fje2_gI.m4a" data-id="USJ4fje2_gI" data-title="مساجله شعريه — القسم 1" data-series="عاشق ومعشوق" data-number="5" data-duration="182"><span class="ep-num">٥</span><span class="ep-name">مساجله شعريه — القسم 1</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/wGVu9Otja10.m4a" data-id="wGVu9Otja10" data-title="زيد ابن غيام المطيري" data-series="عاشق ومعشوق" data-number="6" data-duration="183"><span class="ep-num">٦</span><span class="ep-name">زيد ابن غيام المطيري</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/nS6WqGfFea8.m4a" data-id="nS6WqGfFea8" data-title="عبدالله مفرح الدوسري" data-series="عاشق ومعشوق" data-number="7" data-duration="183"><span class="ep-num">٧</span><span class="ep-name">عبدالله مفرح الدوسري</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/s7vPRmtXaXU.m4a" data-id="s7vPRmtXaXU" data-title="سمير أبن زيدان الجربا" data-series="عاشق ومعشوق" data-number="8" data-duration="183"><span class="ep-num">٨</span><span class="ep-name">سمير أبن زيدان الجربا</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/GivJ3VNId2c.m4a" data-id="GivJ3VNId2c" data-title="مسجلة شعريه جديع بن قبلان ونمر بن عدوان" data-series="عاشق ومعشوق" data-number="9" data-duration="183"><span class="ep-num">٩</span><span class="ep-name">مسجلة شعريه جديع بن قبلان ونمر بن عدوان</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/6FIfL190EJQ.m4a" data-id="6FIfL190EJQ" data-title="قمره الدعجانيه — عاشق ومعشوقه" data-series="عاشق ومعشوق" data-number="10" data-duration="285"><span class="ep-num">١٠</span><span class="ep-name">قمره الدعجانيه — عاشق ومعشوقه</span><span class="ep-time">٤:٤٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/JyH2SjBv2ek.m4a" data-id="JyH2SjBv2ek" data-title="بندر ابن سرور العتيبي" data-series="عاشق ومعشوق" data-number="11" data-duration="182"><span class="ep-num">١١</span><span class="ep-name">بندر ابن سرور العتيبي</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/GaMiyaW_yUA.m4a" data-id="GaMiyaW_yUA" data-title="محمد العبدالله القاضي يمدح مدينه عنيزه" data-series="عاشق ومعشوق" data-number="12" data-duration="183"><span class="ep-num">١٢</span><span class="ep-name">محمد العبدالله القاضي يمدح مدينه عنيزه</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/iTM3_bVdHFc.m4a" data-id="iTM3_bVdHFc" data-title="محمد عبدالله القاضي" data-series="عاشق ومعشوق" data-number="13" data-duration="182"><span class="ep-num">١٣</span><span class="ep-name">محمد عبدالله القاضي</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/9a_FPtrCWuk.m4a" data-id="9a_FPtrCWuk" data-title="حمد الشراري" data-series="عاشق ومعشوق" data-number="14" data-duration="182"><span class="ep-num">١٤</span><span class="ep-name">حمد الشراري</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/bHTZYKfzrNE.m4a" data-id="bHTZYKfzrNE" data-title="فهد بن صليبيخ" data-series="عاشق ومعشوق" data-number="15" data-duration="183"><span class="ep-num">١٥</span><span class="ep-name">فهد بن صليبيخ</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/mSOGFwhyoC4.m4a" data-id="mSOGFwhyoC4" data-title="قصيده غزليه بحرف الثاء عايد السعدي الشمري" data-series="عاشق ومعشوق" data-number="16" data-duration="183"><span class="ep-num">١٦</span><span class="ep-name">قصيده غزليه بحرف الثاء عايد السعدي الشمري</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/shBYFKUpYho.m4a" data-id="shBYFKUpYho" data-title="عايد رغيان الشراري" data-series="عاشق ومعشوق" data-number="17" data-duration="183"><span class="ep-num">١٧</span><span class="ep-name">عايد رغيان الشراري</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/k9VU7UUh8vg.m4a" data-id="k9VU7UUh8vg" data-title="دوسه الشبرمي قصة الدخيل" data-series="عاشق ومعشوق" data-number="18" data-duration="225"><span class="ep-num">١٨</span><span class="ep-name">دوسه الشبرمي قصة الدخيل</span><span class="ep-time">٣:٤٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/hdj4AsTdrVA.m4a" data-id="hdj4AsTdrVA" data-title="شالح ابن هدلان" data-series="عاشق ومعشوق" data-number="19" data-duration="183"><span class="ep-num">١٩</span><span class="ep-name">شالح ابن هدلان</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/b2b5vyVwLaE.m4a" data-id="b2b5vyVwLaE" data-title="عبيد راعي بقعاء" data-series="عاشق ومعشوق" data-number="20" data-duration="183"><span class="ep-num">٢٠</span><span class="ep-name">عبيد راعي بقعاء</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/g6C_QRyxHFs.m4a" data-id="g6C_QRyxHFs" data-title="مساجله شعريه — القسم 2" data-series="عاشق ومعشوق" data-number="21" data-duration="183"><span class="ep-num">٢١</span><span class="ep-name">مساجله شعريه — القسم 2</span><span class="ep-time">٣:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-asheq-wamaashuq/B38hDgn3bCY.m4a" data-id="B38hDgn3bCY" data-title="قصه المملوكه" data-series="عاشق ومعشوق" data-number="22" data-duration="182"><span class="ep-num">٢٢</span><span class="ep-name">قصه المملوكه</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+        </ol>
+      </details>
+      <details class="season">
+        <summary><span class="season-name">ضحايا العشق</span><span class="season-meta">١٦ حلقة · ١ س ١٣ د</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 9.6 12 14.2l4.6-4.6L18 11l-6 6-6-6z"/></svg></summary>
+        <ol class="episodes">
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/V6R0qFr6HWc.m4a" data-id="V6R0qFr6HWc" data-title="قصة وقصيدة خلف ابن دعيجا ومحيسن العنزي" data-series="ضحايا العشق" data-number="1" data-duration="373"><span class="ep-num">١</span><span class="ep-name">قصة وقصيدة خلف ابن دعيجا ومحيسن العنزي</span><span class="ep-time">٦:١٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/wc0zLa939iM.m4a" data-id="wc0zLa939iM" data-title="قصة عيضه النفيعي العتيبي" data-series="ضحايا العشق" data-number="2" data-duration="271"><span class="ep-num">٢</span><span class="ep-name">قصة عيضه النفيعي العتيبي</span><span class="ep-time">٤:٣١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/pvXcD_1o4aM.m4a" data-id="pvXcD_1o4aM" data-title="قصة وقصيدة القلب كنا بالسكاكين يشعط" data-series="ضحايا العشق" data-number="3" data-duration="202"><span class="ep-num">٣</span><span class="ep-name">قصة وقصيدة القلب كنا بالسكاكين يشعط</span><span class="ep-time">٣:٢٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/GZRpqSG7mR8.m4a" data-id="GZRpqSG7mR8" data-title="قصة الامير عامر الخفاجي مع بنت بني هلال" data-series="ضحايا العشق" data-number="4" data-duration="286"><span class="ep-num">٤</span><span class="ep-name">قصة الامير عامر الخفاجي مع بنت بني هلال</span><span class="ep-time">٤:٤٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/0OdQobB1nLw.m4a" data-id="0OdQobB1nLw" data-title="قصة غريسة وزيد الهلالي" data-series="ضحايا العشق" data-number="5" data-duration="244"><span class="ep-num">٥</span><span class="ep-name">قصة غريسة وزيد الهلالي</span><span class="ep-time">٤:٠٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/LhpNfeXitWI.m4a" data-id="LhpNfeXitWI" data-title="قصة عبدالرحيم المطوع" data-series="ضحايا العشق" data-number="6" data-duration="186"><span class="ep-num">٦</span><span class="ep-name">قصة عبدالرحيم المطوع</span><span class="ep-time">٣:٠٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/hrnCfrDwV_4.m4a" data-id="hrnCfrDwV_4" data-title="قصة فهد العجمي" data-series="ضحايا العشق" data-number="7" data-duration="182"><span class="ep-num">٧</span><span class="ep-name">قصة فهد العجمي</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/wstNvojweFU.m4a" data-id="wstNvojweFU" data-title="قصة دخيل الله الدجيما العتيبي" data-series="ضحايا العشق" data-number="8" data-duration="311"><span class="ep-num">٨</span><span class="ep-name">قصة دخيل الله الدجيما العتيبي</span><span class="ep-time">٥:١١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/0SxeN74WqfM.m4a" data-id="0SxeN74WqfM" data-title="قصة وقصيدة قمرا الدعجانيه" data-series="ضحايا العشق" data-number="9" data-duration="283"><span class="ep-num">٩</span><span class="ep-name">قصة وقصيدة قمرا الدعجانيه</span><span class="ep-time">٤:٤٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/NBidCXo-SPY.m4a" data-id="NBidCXo-SPY" data-title="قصة وقصيدة الألفية محمد العمار" data-series="ضحايا العشق" data-number="10" data-duration="284"><span class="ep-num">١٠</span><span class="ep-name">قصة وقصيدة الألفية محمد العمار</span><span class="ep-time">٤:٤٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/TvhVrhPygvw.m4a" data-id="TvhVrhPygvw" data-title="قصة علياء وابو زيد الهلالي" data-series="ضحايا العشق" data-number="11" data-duration="346"><span class="ep-num">١١</span><span class="ep-name">قصة علياء وابو زيد الهلالي</span><span class="ep-time">٥:٤٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/B_RcuXP-g8M.m4a" data-id="B_RcuXP-g8M" data-title="قصة جديع ابن هذال" data-series="ضحايا العشق" data-number="12" data-duration="188"><span class="ep-num">١٢</span><span class="ep-name">قصة جديع ابن هذال</span><span class="ep-time">٣:٠٨</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/tw2ZJ3iUI3Q.m4a" data-id="tw2ZJ3iUI3Q" data-title="قصه فزعة الحاكم لـ مخلد القثامي العتيبي" data-series="ضحايا العشق" data-number="13" data-duration="243"><span class="ep-num">١٣</span><span class="ep-name">قصه فزعة الحاكم لـ مخلد القثامي العتيبي</span><span class="ep-time">٤:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/QUfViLdXZmo.m4a" data-id="QUfViLdXZmo" data-title="قصة إبراهيم الكنعاني" data-series="ضحايا العشق" data-number="14" data-duration="197"><span class="ep-num">١٤</span><span class="ep-name">قصة إبراهيم الكنعاني</span><span class="ep-time">٣:١٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/LewHE0f7YX8.m4a" data-id="LewHE0f7YX8" data-title="قصة وقصيدة الظلم ظلمات" data-series="ضحايا العشق" data-number="15" data-duration="328"><span class="ep-num">١٥</span><span class="ep-name">قصة وقصيدة الظلم ظلمات</span><span class="ep-time">٥:٢٨</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-dahaya-aleshq/BwmZVzGj5V0.m4a" data-id="BwmZVzGj5V0" data-title="قصة مسلم الوليعي" data-series="ضحايا العشق" data-number="16" data-duration="433"><span class="ep-num">١٦</span><span class="ep-name">قصة مسلم الوليعي</span><span class="ep-time">٧:١٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+        </ol>
+      </details>
+      <details class="season">
+        <summary><span class="season-name">القصائد المتداخلة</span><span class="season-meta">٩ حلقة · ١ س ٣٤ د</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 9.6 12 14.2l4.6-4.6L18 11l-6 6-6-6z"/></svg></summary>
+        <ol class="episodes">
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-qasaid-mutadakhila/wXRtmzlI9JM.m4a" data-id="wXRtmzlI9JM" data-title="من القصائد التي تسبب كثير الاختلاف بسبب شهره القصيده" data-series="القصائد المتداخلة" data-number="1" data-duration="969"><span class="ep-num">١</span><span class="ep-name">من القصائد التي تسبب كثير الاختلاف بسبب شهره القصيده</span><span class="ep-time">١٦:٠٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-qasaid-mutadakhila/SwlLEKJCtPg.m4a" data-id="SwlLEKJCtPg" data-title="القصائد المتداخلة — القسم 1" data-series="القصائد المتداخلة" data-number="2" data-duration="353"><span class="ep-num">٢</span><span class="ep-name">القصائد المتداخلة — القسم 1</span><span class="ep-time">٥:٥٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-qasaid-mutadakhila/LGcEmbgmCUw.m4a" data-id="LGcEmbgmCUw" data-title="القصائد المتداخلة — القسم 2" data-series="القصائد المتداخلة" data-number="3" data-duration="368"><span class="ep-num">٣</span><span class="ep-name">القصائد المتداخلة — القسم 2</span><span class="ep-time">٦:٠٨</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-qasaid-mutadakhila/Wov5C9TnkYg.m4a" data-id="Wov5C9TnkYg" data-title="قصيدة العنود" data-series="القصائد المتداخلة" data-number="4" data-duration="688"><span class="ep-num">٤</span><span class="ep-name">قصيدة العنود</span><span class="ep-time">١١:٢٨</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-qasaid-mutadakhila/tcM-q6pCLxU.m4a" data-id="tcM-q6pCLxU" data-title="القصائد المتداخلة — القسم 3" data-series="القصائد المتداخلة" data-number="5" data-duration="691"><span class="ep-num">٥</span><span class="ep-name">القصائد المتداخلة — القسم 3</span><span class="ep-time">١١:٣١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-qasaid-mutadakhila/pdbTIwI2UOQ.m4a" data-id="pdbTIwI2UOQ" data-title="القصائد المتداخلة — القسم 4" data-series="القصائد المتداخلة" data-number="6" data-duration="838"><span class="ep-num">٦</span><span class="ep-name">القصائد المتداخلة — القسم 4</span><span class="ep-time">١٣:٥٨</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-qasaid-mutadakhila/AZZD_9MlYLk.m4a" data-id="AZZD_9MlYLk" data-title="القصائد المتداخلة — القسم 5" data-series="القصائد المتداخلة" data-number="7" data-duration="557"><span class="ep-num">٧</span><span class="ep-name">القصائد المتداخلة — القسم 5</span><span class="ep-time">٩:١٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-qasaid-mutadakhila/4HiZecfS12s.m4a" data-id="4HiZecfS12s" data-title="القصائد المتداخلة — القسم 6" data-series="القصائد المتداخلة" data-number="8" data-duration="434"><span class="ep-num">٨</span><span class="ep-name">القصائد المتداخلة — القسم 6</span><span class="ep-time">٧:١٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-qasaid-mutadakhila/WxsjHxLeN2c.m4a" data-id="WxsjHxLeN2c" data-title="القصائد المتداخلة — القسم 7" data-series="القصائد المتداخلة" data-number="9" data-duration="717"><span class="ep-num">٩</span><span class="ep-name">القصائد المتداخلة — القسم 7</span><span class="ep-time">١١:٥٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+        </ol>
+      </details>
+      <details class="season">
+        <summary><span class="season-name">فنجال الكيف</span><span class="season-meta">٦ حلقة · ١ س ٩ د</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 9.6 12 14.2l4.6-4.6L18 11l-6 6-6-6z"/></svg></summary>
+        <ol class="episodes">
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-finjal-alkayf/WHzeTWiV3sQ.m4a" data-id="WHzeTWiV3sQ" data-title="سلوم تقديم القهوة — قوانين تقديم الفنجال ولمن يُصَب أول فنجال قهوة عند العرب؟" data-series="فنجال الكيف" data-number="1" data-duration="959"><span class="ep-num">١</span><span class="ep-name">سلوم تقديم القهوة — قوانين تقديم الفنجال ولمن يُصَب أول فنجال قهوة عند العرب؟</span><span class="ep-time">١٥:٥٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-finjal-alkayf/KJYK1OVze_E.m4a" data-id="KJYK1OVze_E" data-title="بسبب القهوة انتهت الحرب بين ابن هذال شيخ قبيلة عنزة وابن سويط شيخ قبيلة الظفير" data-series="فنجال الكيف" data-number="2" data-duration="199"><span class="ep-num">٢</span><span class="ep-name">بسبب القهوة انتهت الحرب بين ابن هذال شيخ قبيلة عنزة وابن سويط شيخ قبيلة الظفير</span><span class="ep-time">٣:١٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-finjal-alkayf/IvdO2xKlwls.m4a" data-id="IvdO2xKlwls" data-title="أسرار وقوانين إبهار القهوة عند أهل البادية، مع أروع القصائد والأشعار عن الهيل" data-series="فنجال الكيف" data-number="3" data-duration="876"><span class="ep-num">٣</span><span class="ep-name">أسرار وقوانين إبهار القهوة عند أهل البادية، مع أروع القصائد والأشعار عن الهيل</span><span class="ep-time">١٤:٣٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-finjal-alkayf/z2txX43ADco.m4a" data-id="z2txX43ADco" data-title="أصول الارتباط بالشبه والمجلس والتنبيه التام عدم الاستهانة بالقهوة وقوانينها" data-series="فنجال الكيف" data-number="4" data-duration="686"><span class="ep-num">٤</span><span class="ep-name">أصول الارتباط بالشبه والمجلس والتنبيه التام عدم الاستهانة بالقهوة وقوانينها</span><span class="ep-time">١١:٢٦</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-finjal-alkayf/jkCtnr-DDAY.m4a" data-id="jkCtnr-DDAY" data-title="التعرف على تعقيب الفنجال ومحكمة القهوة أقسى قوانين العرب تجاه من يخالف الأعراف" data-series="فنجال الكيف" data-number="5" data-duration="329"><span class="ep-num">٥</span><span class="ep-name">التعرف على تعقيب الفنجال ومحكمة القهوة أقسى قوانين العرب تجاه من يخالف الأعراف</span><span class="ep-time">٥:٢٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-finjal-alkayf/ofEwIMHP764.m4a" data-id="ofEwIMHP764" data-title="ذواق الفنجال وسر النقد وما هو سر نقد القهوة ومفاخر العرب فيها — قصة أبن ظويهر" data-series="فنجال الكيف" data-number="6" data-duration="1108"><span class="ep-num">٦</span><span class="ep-name">ذواق الفنجال وسر النقد وما هو سر نقد القهوة ومفاخر العرب فيها — قصة أبن ظويهر</span><span class="ep-time">١٨:٢٨</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+        </ol>
+      </details>
+      <details class="season">
+        <summary><span class="season-name">أخرى</span><span class="season-meta">٣ حلقة · ٣١ دقيقة</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 9.6 12 14.2l4.6-4.6L18 11l-6 6-6-6z"/></svg></summary>
+        <ol class="episodes">
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-okhra/9OkKQBKyTnY.m4a" data-id="9OkKQBKyTnY" data-title="الشاعر خضير الصعليك — يمدح ناصر الحيدان راعي وسيطه" data-series="أخرى" data-number="1" data-duration="207"><span class="ep-num">١</span><span class="ep-name">الشاعر خضير الصعليك — يمدح ناصر الحيدان راعي وسيطه</span><span class="ep-time">٣:٢٧</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-okhra/wG__gpdQuO8.m4a" data-id="wG__gpdQuO8" data-title="تسليط الضوء على وصايا الآباء للأبناء في صون عادة الكرم والخصال الطيبة" data-series="أخرى" data-number="2" data-duration="624"><span class="ep-num">٢</span><span class="ep-name">تسليط الضوء على وصايا الآباء للأبناء في صون عادة الكرم والخصال الطيبة</span><span class="ep-time">١٠:٢٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-okhra/3OT-EcEL4HI.m4a" data-id="3OT-EcEL4HI" data-title="تكون القبائل في جزيره العرب" data-series="أخرى" data-number="3" data-duration="1049"><span class="ep-num">٣</span><span class="ep-name">تكون القبائل في جزيره العرب</span><span class="ep-time">١٧:٢٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+        </ol>
+      </details>
+      <details class="season">
+        <summary><span class="season-name">موسوعة التاريخ والأدب</span><span class="season-meta">١ حلقة · ٣ دقيقة</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 9.6 12 14.2l4.6-4.6L18 11l-6 6-6-6z"/></svg></summary>
+        <ol class="episodes">
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mawsuat-tarikh-wa-adab/hR-LkMcljDk.m4a" data-id="hR-LkMcljDk" data-title="الخاتمه لموسوعة التاريخ والأدب في جزيرة العرب" data-series="موسوعة التاريخ والأدب" data-number="1" data-duration="182"><span class="ep-num">١</span><span class="ep-name">الخاتمه لموسوعة التاريخ والأدب في جزيرة العرب</span><span class="ep-time">٣:٠٢</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+        </ol>
+      </details>
+      <details class="season">
+        <summary><span class="season-name">مكملات</span><span class="season-meta">٤ حلقة · ٣٧ دقيقة</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 9.6 12 14.2l4.6-4.6L18 11l-6 6-6-6z"/></svg></summary>
+        <ol class="episodes">
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mukammilat/FCs8ADkvlWw.m4a" data-id="FCs8ADkvlWw" data-title="مكملات — القسم 1" data-series="مكملات" data-number="1" data-duration="319"><span class="ep-num">١</span><span class="ep-name">مكملات — القسم 1</span><span class="ep-time">٥:١٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mukammilat/VK4ZlOvcNOQ.m4a" data-id="VK4ZlOvcNOQ" data-title="مكملات — القسم 2" data-series="مكملات" data-number="2" data-duration="1539"><span class="ep-num">٢</span><span class="ep-name">مكملات — القسم 2</span><span class="ep-time">٢٥:٣٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mukammilat/0XzU5iscrXM.m4a" data-id="0XzU5iscrXM" data-title="7 من قوانين القهوة - تقديم الفنجال - فنجال الكيف" data-series="مكملات" data-number="3" data-duration="181"><span class="ep-num">٣</span><span class="ep-name">7 من قوانين القهوة - تقديم الفنجال - فنجال الكيف</span><span class="ep-time">٣:٠١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-mukammilat/IuwblC9Jgew.m4a" data-id="IuwblC9Jgew" data-title="1 مقدمة فنجال الكيف" data-series="مكملات" data-number="4" data-duration="198"><span class="ep-num">٤</span><span class="ep-name">1 مقدمة فنجال الكيف</span><span class="ep-time">٣:١٨</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+        </ol>
+      </details>
+    </div>
+    <div class="panel" id="panel-kasayet" role="tabpanel" aria-labelledby="tab-kasayet" data-key="kasayet" data-title="فواز الغسلان — الكاسيتات الكاملة" data-cover="kasayet/cover.jpg">
+      <label class="search">
+        <span class="sr-only">ابحث في العناوين</span>
+        <input type="search" placeholder="ابحث في عناوين الحلقات…" autocomplete="off">
+      </label>
+      <p class="no-results" hidden>لا توجد حلقات مطابقة.</p>
+      <details class="season">
+        <summary><span class="season-name">كاسيت</span><span class="season-meta">١٢ كاسيت · ١٤ س ٢٨ د</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 9.6 12 14.2l4.6-4.6L18 11l-6 6-6-6z"/></svg></summary>
+        <ol class="episodes">
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/Bb60r2PNAZU.m4a" data-id="Bb60r2PNAZU" data-title="كاسيت نوادر من التراث الجزء الاول" data-series="كاسيت" data-number="1" data-duration="4283"><span class="ep-num">١</span><span class="ep-name">كاسيت نوادر من التراث الجزء الاول</span><span class="ep-time">١:١١:٢٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/A5Hkwd30Gm8.m4a" data-id="A5Hkwd30Gm8" data-title="كاسيت الموسوعة الشعرية الجزء الثاني كامل" data-series="كاسيت" data-number="2" data-duration="4301"><span class="ep-num">٢</span><span class="ep-name">كاسيت الموسوعة الشعرية الجزء الثاني كامل</span><span class="ep-time">١:١١:٤١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/BD5fjE1jRdw.m4a" data-id="BD5fjE1jRdw" data-title="كاسيت القصائد المتداخلة كامل" data-series="كاسيت" data-number="3" data-duration="4643"><span class="ep-num">٣</span><span class="ep-name">كاسيت القصائد المتداخلة كامل</span><span class="ep-time">١:١٧:٢٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/pLi4M0r0lMM.m4a" data-id="pLi4M0r0lMM" data-title="كاسيت ضحايا العشق كامل" data-series="كاسيت" data-number="4" data-duration="5491"><span class="ep-num">٤</span><span class="ep-name">كاسيت ضحايا العشق كامل</span><span class="ep-time">١:٣١:٣١</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/v_sSYqNpaD4.m4a" data-id="v_sSYqNpaD4" data-title="كاسيت جواهر الأمثال الشعبية كامل" data-series="كاسيت" data-number="5" data-duration="6775"><span class="ep-num">٥</span><span class="ep-name">كاسيت جواهر الأمثال الشعبية كامل</span><span class="ep-time">١:٥٢:٥٥</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/pbv0_jlFVfo.m4a" data-id="pbv0_jlFVfo" data-title="كاسيت الموسوعة الشعرية الجزء الاول كامل" data-series="كاسيت" data-number="6" data-duration="3663"><span class="ep-num">٦</span><span class="ep-name">كاسيت الموسوعة الشعرية الجزء الاول كامل</span><span class="ep-time">١:٠١:٠٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/xEqTgiZUzhw.m4a" data-id="xEqTgiZUzhw" data-title="كاسيت نوادر من التراث الجزء الثاني والأخير" data-series="كاسيت" data-number="7" data-duration="3270"><span class="ep-num">٧</span><span class="ep-name">كاسيت نوادر من التراث الجزء الثاني والأخير</span><span class="ep-time">٥٤:٣٠</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/M_U6hLY36Mw.m4a" data-id="M_U6hLY36Mw" data-title="كاسيت مفاخر العرب" data-series="كاسيت" data-number="8" data-duration="4163"><span class="ep-num">٨</span><span class="ep-name">كاسيت مفاخر العرب</span><span class="ep-time">١:٠٩:٢٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/yC3cGDreaTc.m4a" data-id="yC3cGDreaTc" data-title="كاسيت عاشق ومعشوق كامل" data-series="كاسيت" data-number="9" data-duration="3559"><span class="ep-num">٩</span><span class="ep-name">كاسيت عاشق ومعشوق كامل</span><span class="ep-time">٥٩:١٩</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/Vz6P4hOoNx8.m4a" data-id="Vz6P4hOoNx8" data-title="كاسيت الموسوعة الشعرية الجزء الثالث والأخير" data-series="كاسيت" data-number="10" data-duration="4284"><span class="ep-num">١٠</span><span class="ep-name">كاسيت الموسوعة الشعرية الجزء الثالث والأخير</span><span class="ep-time">١:١١:٢٤</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/neLdp1lP4U4.m4a" data-id="neLdp1lP4U4" data-title="كاسيت القهوة وقوانينها عند العرب كامل" data-series="كاسيت" data-number="11" data-duration="4993"><span class="ep-num">١١</span><span class="ep-name">كاسيت القهوة وقوانينها عند العرب كامل</span><span class="ep-time">١:٢٣:١٣</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+          <li><a class="ep" href="https://github.com/iTzFaisal/alrawie/releases/download/audio-kasayet/9kW5ihGdNos.m4a" data-id="9kW5ihGdNos" data-title="كاسيت نوادر شعرية كامل" data-series="كاسيت" data-number="12" data-duration="2678"><span class="ep-num">١٢</span><span class="ep-name">كاسيت نوادر شعرية كامل</span><span class="ep-time">٤٤:٣٨</span><span class="ep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></span></a></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <h2 style="margin:44px 0 10px;font-size:20px">كيف تستمع؟</h2>
   <ol>
-    <li>انسخ رابط الاشتراك (Feed URL) من البطاقة أعلاه.</li>
+    <li>من هذه الصفحة: اختر سلسلة ثم حلقة من قسم <a href="#listen">استمع الآن</a>، وسيعمل المشغّل مباشرة. يمكنك البحث في العناوين والتنقل بين الحلقات ومتابعة الاستماع من حيث توقفت.</li>
+    <li>للاشتراك في تطبيق بودكاست: انسخ رابط الاشتراك (Feed URL) من البطاقة أعلاه.</li>
     <li>في تطبيق البودكاست اختر «إضافة بودكاست عبر رابط» أو «Add by URL» والصق الرابط: Podcast Addict، Overcast، Pocket Casts، AntennaPod، Castro، Podverse…</li>
     <li>على iPhone افتح <a href="https://podcasts.apple.com/us/podcast/%D8%A3%D8%B1%D8%B4%D9%8A%D9%81-%D8%A7%D9%84%D8%B1%D8%A7%D9%88%D9%8A-%D9%81%D9%88%D8%A7%D8%B2-%D8%A7%D9%84%D8%BA%D8%B3%D9%84%D8%A7%D9%86/id6835240326">Apple Podcasts</a> مباشرة، أو ابحث في التطبيق عن «أرشيف الراوي فواز الغسلان».</li>
     <li>تحميل الملفات كاملةً (بدون بودكاست): <a href="https://github.com/iTzFaisal/alrawie/releases/latest">صفحة الإصدارات</a>.</li>
@@ -116,6 +529,39 @@
     <a href="https://github.com/iTzFaisal/alrawie">github.com/iTzFaisal/alrawie</a> · Arabic poetry and folk tales podcast
   </footer>
 </main>
+<div class="player" id="player" role="region" aria-label="مشغل الحلقات" hidden>
+  <div class="player-inner">
+    <img class="p-cover" id="p-cover" src="cover.jpg" alt="">
+    <div class="p-info">
+      <div class="p-title" id="p-title"></div>
+      <div class="p-sub" id="p-sub"></div>
+    </div>
+    <div class="p-controls">
+      <button class="pbtn" id="p-prev" type="button" aria-label="الحلقة السابقة"><svg viewBox="0 0 24 24"><use href="#i-prev"/></svg></button>
+      <button class="pbtn" id="p-back" type="button" aria-label="إرجاع ١٥ ثانية"><svg viewBox="0 0 24 24"><use href="#i-back"/></svg></button>
+      <button class="pbtn" id="p-toggle" type="button" aria-label="تشغيل"><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></button>
+      <button class="pbtn" id="p-fwd" type="button" aria-label="تقديم ٣٠ ثانية"><svg viewBox="0 0 24 24"><use href="#i-fwd"/></svg></button>
+      <button class="pbtn" id="p-next" type="button" aria-label="الحلقة التالية"><svg viewBox="0 0 24 24"><use href="#i-next"/></svg></button>
+      <select class="p-rate" id="p-rate" aria-label="سرعة التشغيل">
+        <option value="1">١×</option>
+        <option value="1.25">١٫٢٥×</option>
+        <option value="1.5">١٫٥×</option>
+        <option value="1.75">١٫٧٥×</option>
+        <option value="2">٢×</option>
+      </select>
+    </div>
+    <div class="p-actions">
+      <a class="pbtn" id="p-download" href="#" aria-label="تحميل الحلقة" title="تحميل"><svg viewBox="0 0 24 24"><use href="#i-download"/></svg></a>
+      <button class="pbtn" id="p-close" type="button" aria-label="إغلاق المشغل" title="إغلاق"><svg viewBox="0 0 24 24"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="p-seek">
+      <span class="p-time" id="p-cur">٠:٠٠</span>
+      <input type="range" id="p-range" min="0" max="1000" value="0" step="1" aria-label="موضع التشغيل">
+      <span class="p-time" id="p-dur">٠:٠٠</span>
+    </div>
+  </div>
+  <audio id="p-audio" preload="metadata"></audio>
+</div>
 <script>
 function copyFeed(key, button) {
   const text = document.getElementById('feed-' + key).textContent;
@@ -125,6 +571,487 @@ function copyFeed(key, button) {
     setTimeout(function () { button.textContent = old; }, 1500);
   });
 }
+</script>
+<script>
+(function () {
+  'use strict';
+
+  var audio = document.getElementById('p-audio');
+  if (!audio) return;
+
+  var player = document.getElementById('player');
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tabs [role="tab"]'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('a.ep'));
+  var titleEl = document.getElementById('p-title');
+  var subEl = document.getElementById('p-sub');
+  var coverEl = document.getElementById('p-cover');
+  var toggleBtn = document.getElementById('p-toggle');
+  var toggleUse = toggleBtn.querySelector('use');
+  var range = document.getElementById('p-range');
+  var curEl = document.getElementById('p-cur');
+  var durEl = document.getElementById('p-dur');
+  var rateEl = document.getElementById('p-rate');
+  var downloadEl = document.getElementById('p-download');
+  var closeBtn = document.getElementById('p-close');
+
+  var AR = '٠١٢٣٤٥٦٧٨٩';
+  var POS_KEY = 'alrawie:positions';
+  var RATE_KEY = 'alrawie:rate';
+  var RATES = [1, 1.25, 1.5, 1.75, 2];
+
+  var currentLink = null;
+  var currentInfo = null;
+  var resumeAt = 0;
+  var dragging = false;
+  var lastSave = 0;
+  var rate = 1;
+
+  function arabic(value) {
+    return String(value).replace(/[0-9]/g, function (digit) {
+      return AR.charAt(Number(digit));
+    });
+  }
+
+  function clock(seconds) {
+    if (!isFinite(seconds) || seconds < 0) seconds = 0;
+    seconds = Math.floor(seconds);
+    var hours = Math.floor(seconds / 3600);
+    var minutes = Math.floor((seconds % 3600) / 60);
+    var secs = seconds % 60;
+    var text = hours
+      ? hours + ':' + ('0' + minutes).slice(-2) + ':' + ('0' + secs).slice(-2)
+      : minutes + ':' + ('0' + secs).slice(-2);
+    return arabic(text);
+  }
+
+  function readPositions() {
+    try {
+      return JSON.parse(localStorage.getItem(POS_KEY)) || {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function writePositions(value) {
+    try {
+      localStorage.setItem(POS_KEY, JSON.stringify(value));
+    } catch (error) {}
+  }
+
+  function savePosition() {
+    if (!currentInfo || !audio.duration) return;
+    var store = readPositions();
+    if (audio.currentTime > 3 && audio.duration - audio.currentTime > 5) {
+      store[currentInfo.id] = Math.round(audio.currentTime);
+    } else {
+      delete store[currentInfo.id];
+    }
+    writePositions(store);
+  }
+
+  function setToggle(playing) {
+    toggleUse.setAttribute('href', playing ? '#i-pause' : '#i-play');
+    toggleBtn.setAttribute('aria-label', playing ? 'إيقاف مؤقت' : 'تشغيل');
+  }
+
+  function markPlaying(link) {
+    links.forEach(function (item) {
+      item.classList.remove('playing');
+      item.removeAttribute('aria-current');
+    });
+    if (link) {
+      link.classList.add('playing');
+      link.setAttribute('aria-current', 'true');
+    }
+  }
+
+  function panelFor(link) {
+    return link.closest('.panel');
+  }
+
+  function infoFor(link) {
+    var panel = panelFor(link);
+    return {
+      id: link.dataset.id,
+      title: link.dataset.title,
+      series: link.dataset.series,
+      number: Number(link.dataset.number),
+      duration: Number(link.dataset.duration),
+      url: link.href,
+      cover: panel.dataset.cover,
+      showTitle: panel.dataset.title,
+      cassette: panel.dataset.key === 'kasayet'
+    };
+  }
+
+  function subtitle(info) {
+    if (info.cassette) return info.series + ' ' + arabic(info.number);
+    return info.series + ' · الحلقة ' + arabic(info.number);
+  }
+
+  function setMediaSession(info) {
+    if (!('mediaSession' in navigator)) return;
+    try {
+      if (typeof MediaMetadata === 'function') {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: info.title,
+          artist: info.showTitle,
+          album: info.series,
+          artwork: [{
+            src: new URL(info.cover, location.href).href,
+            sizes: '3000x3000',
+            type: 'image/jpeg'
+          }]
+        });
+      }
+    } catch (error) {}
+  }
+
+  function updatePositionState() {
+    if (!('mediaSession' in navigator) || !navigator.mediaSession.setPositionState) return;
+    if (!isFinite(audio.duration) || audio.duration <= 0) return;
+    try {
+      navigator.mediaSession.setPositionState({
+        duration: audio.duration,
+        playbackRate: audio.playbackRate,
+        position: Math.min(audio.currentTime, audio.duration)
+      });
+    } catch (error) {}
+  }
+
+  function load(link, autoplay) {
+    if (currentLink === link && currentInfo) {
+      if (audio.paused) {
+        audio.play().catch(function () {});
+      } else {
+        audio.pause();
+      }
+      return;
+    }
+
+    savePosition();
+    var info = infoFor(link);
+    var saved = readPositions()[info.id] || 0;
+
+    currentLink = link;
+    currentInfo = info;
+    resumeAt = saved > 4 ? saved : 0;
+
+    audio.src = info.url;
+    audio.playbackRate = rate;
+    titleEl.textContent = info.title;
+    subEl.textContent = subtitle(info);
+    coverEl.src = info.cover;
+    coverEl.alt = info.showTitle;
+    downloadEl.href = info.url;
+    durEl.textContent = clock(info.duration);
+    curEl.textContent = clock(0);
+    range.value = '0';
+    player.hidden = false;
+    document.body.classList.add('has-player');
+    markPlaying(link);
+    setMediaSession(info);
+
+    try {
+      history.replaceState(null, '', '#ep-' + info.id);
+    } catch (error) {}
+
+    if (autoplay) {
+      audio.play().catch(function () { setToggle(false); });
+    }
+  }
+
+  function playlist(link) {
+    return Array.prototype.slice.call(
+      panelFor(link).querySelectorAll('a.ep')
+    ).filter(function (item) {
+      return !item.parentNode.hidden;
+    });
+  }
+
+  function step(delta, reveal) {
+    if (!currentLink) return;
+    var list = playlist(currentLink);
+    var next = list[list.indexOf(currentLink) + delta];
+    if (!next) return;
+    var season = next.closest('details');
+    if (season) season.open = true;
+    load(next, true);
+    if (reveal) next.scrollIntoView({ block: 'nearest' });
+  }
+
+  function seekBy(delta) {
+    if (!currentInfo) return;
+    var duration = audio.duration || currentInfo.duration;
+    var target = Math.max(0, Math.min(duration - 0.25, audio.currentTime + delta));
+    audio.currentTime = target;
+    range.value = String(Math.round((target / duration) * 1000));
+    curEl.textContent = clock(target);
+  }
+
+  audio.addEventListener('loadedmetadata', function () {
+    audio.playbackRate = rate;
+    durEl.textContent = clock(audio.duration);
+    if (resumeAt && resumeAt < audio.duration - 8) {
+      audio.currentTime = resumeAt;
+    }
+    resumeAt = 0;
+    updatePositionState();
+  });
+
+  audio.addEventListener('timeupdate', function () {
+    if (!dragging && audio.duration) {
+      range.value = String(Math.round((audio.currentTime / audio.duration) * 1000));
+      curEl.textContent = clock(audio.currentTime);
+    }
+    if (Date.now() - lastSave > 5000) {
+      lastSave = Date.now();
+      savePosition();
+    }
+    updatePositionState();
+  });
+
+  audio.addEventListener('play', function () { setToggle(true); });
+
+  audio.addEventListener('playing', function () {
+    if (currentInfo) subEl.textContent = subtitle(currentInfo);
+    setToggle(true);
+  });
+
+  audio.addEventListener('pause', function () {
+    setToggle(false);
+    savePosition();
+    updatePositionState();
+  });
+
+  audio.addEventListener('seeked', updatePositionState);
+
+  audio.addEventListener('waiting', function () {
+    subEl.textContent = 'جارٍ التحميل…';
+  });
+
+  audio.addEventListener('error', function () {
+    if (!currentInfo || !audio.error || audio.error.code === 1) return;
+    subEl.textContent = 'تعذّر تشغيل الملف — استخدم زر التحميل.';
+    setToggle(false);
+  });
+
+  audio.addEventListener('ended', function () {
+    savePosition();
+    var list = currentLink ? playlist(currentLink) : [];
+    var next = currentLink ? list[list.indexOf(currentLink) + 1] : null;
+    if (next) {
+      load(next, true);
+    } else {
+      setToggle(false);
+    }
+  });
+
+  range.addEventListener('input', function () {
+    dragging = true;
+    if (audio.duration) {
+      curEl.textContent = clock((Number(range.value) / 1000) * audio.duration);
+    }
+  });
+
+  range.addEventListener('change', function () {
+    if (audio.duration) {
+      audio.currentTime = (Number(range.value) / 1000) * audio.duration;
+    }
+    dragging = false;
+  });
+
+  toggleBtn.addEventListener('click', function () {
+    if (!currentLink) return;
+    if (audio.paused) {
+      audio.play().catch(function () {});
+    } else {
+      audio.pause();
+    }
+  });
+
+  document.getElementById('p-prev').addEventListener('click', function () { step(-1, true); });
+  document.getElementById('p-next').addEventListener('click', function () { step(1, true); });
+  document.getElementById('p-back').addEventListener('click', function () { seekBy(-15); });
+  document.getElementById('p-fwd').addEventListener('click', function () { seekBy(30); });
+
+  rateEl.addEventListener('change', function () {
+    rate = Number(rateEl.value) || 1;
+    audio.playbackRate = rate;
+    updatePositionState();
+    try {
+      localStorage.setItem(RATE_KEY, String(rate));
+    } catch (error) {}
+  });
+
+  closeBtn.addEventListener('click', function () {
+    savePosition();
+    audio.pause();
+    audio.removeAttribute('src');
+    audio.load();
+    currentLink = null;
+    currentInfo = null;
+    player.hidden = true;
+    document.body.classList.remove('has-player');
+    markPlaying(null);
+    try {
+      history.replaceState(null, '', location.pathname + location.search);
+    } catch (error) {}
+  });
+
+  function activate(key) {
+    tabs.forEach(function (tab) {
+      var active = tab.dataset.key === key;
+      tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      tab.tabIndex = active ? 0 : -1;
+    });
+    panels.forEach(function (panel) {
+      panel.hidden = panel.dataset.key !== key;
+    });
+  }
+
+  tabs.forEach(function (tab, index) {
+    tab.addEventListener('click', function () { activate(tab.dataset.key); });
+    tab.addEventListener('keydown', function (event) {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      var delta = event.key === 'ArrowLeft' ? 1 : -1;
+      var nextTab = tabs[(index + delta + tabs.length) % tabs.length];
+      activate(nextTab.dataset.key);
+      nextTab.focus();
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-listen]'), function (link) {
+    link.addEventListener('click', function () { activate(link.dataset.listen); });
+  });
+
+  function fold(text) {
+    return String(text)
+      .normalize('NFKC')
+      .replace(/[\u064B-\u0652\u0670\u0640]/g, '')
+      .replace(/[إأآٱ]/g, 'ا')
+      .replace(/ى/g, 'ي')
+      .replace(/ة/g, 'ه')
+      .replace(/ؤ/g, 'و')
+      .replace(/ئ/g, 'ي')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function filterPanel(panel, query) {
+    var needle = fold(query);
+    var any = false;
+    var seasons = Array.prototype.slice.call(panel.querySelectorAll('details.season'));
+
+    seasons.forEach(function (season) {
+      var matches = 0;
+      Array.prototype.forEach.call(season.querySelectorAll('a.ep'), function (link) {
+        var hit = !needle || fold(link.dataset.title).indexOf(needle) !== -1;
+        link.parentNode.hidden = !hit;
+        if (hit) matches += 1;
+      });
+
+      if (needle) {
+        if (!('userOpen' in season.dataset)) {
+          season.dataset.userOpen = season.open ? '1' : '0';
+        }
+        season.hidden = matches === 0;
+        season.open = matches > 0;
+        if (matches) any = true;
+      } else {
+        season.hidden = false;
+        if ('userOpen' in season.dataset) {
+          season.open = season.dataset.userOpen === '1';
+          delete season.dataset.userOpen;
+        }
+      }
+    });
+
+    var empty = panel.querySelector('.no-results');
+    if (empty) empty.hidden = !needle || any;
+  }
+
+  panels.forEach(function (panel) {
+    var input = panel.querySelector('.search input');
+    if (!input) return;
+    input.addEventListener('input', function () {
+      filterPanel(panel, input.value);
+    });
+  });
+
+  links.forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      load(link, true);
+    });
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.code !== 'Space' || event.metaKey || event.ctrlKey || event.altKey) return;
+    var tag = (event.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'select' || tag === 'textarea' ||
+        tag === 'button' || tag === 'a' || event.target.isContentEditable) return;
+    if (!currentLink) return;
+    event.preventDefault();
+    if (audio.paused) {
+      audio.play().catch(function () {});
+    } else {
+      audio.pause();
+    }
+  });
+
+  if ('mediaSession' in navigator && navigator.mediaSession.setActionHandler) {
+    var actions = {
+      play: function () { audio.play().catch(function () {}); },
+      pause: function () { audio.pause(); },
+      seekbackward: function (details) {
+        seekBy(-(details && details.seekOffset ? details.seekOffset : 15));
+      },
+      seekforward: function (details) {
+        seekBy(details && details.seekOffset ? details.seekOffset : 30);
+      },
+      previoustrack: function () { step(-1, false); },
+      nexttrack: function () { step(1, false); },
+      seekto: function (details) {
+        if (details && typeof details.seekTime === 'number') {
+          audio.currentTime = details.seekTime;
+        }
+      }
+    };
+    Object.keys(actions).forEach(function (name) {
+      try {
+        navigator.mediaSession.setActionHandler(name, actions[name]);
+      } catch (error) {}
+    });
+  }
+
+  window.addEventListener('pagehide', function () { savePosition(); });
+
+  try {
+    var storedRate = Number(localStorage.getItem(RATE_KEY));
+    if (RATES.indexOf(storedRate) !== -1) rate = storedRate;
+  } catch (error) {}
+  rateEl.value = String(rate);
+
+  function loadFromHash() {
+    var hash = /^#ep-([A-Za-z0-9_-]{11})$/.exec(location.hash);
+    if (!hash) return;
+    var linked = document.querySelector('a.ep[data-id="' + hash[1] + '"]');
+    if (!linked) return;
+    activate(panelFor(linked).dataset.key);
+    var season = linked.closest('details');
+    if (season) season.open = true;
+    if (currentLink !== linked) load(linked, false);
+    linked.scrollIntoView({ block: 'center' });
+  }
+
+  window.addEventListener('hashchange', loadFromHash);
+  activate('main');
+  loadFromHash();
+})();
 </script>
 </body>
 </html>

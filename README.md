@@ -94,12 +94,19 @@ Podcast Addict button uses `podcastaddict.com/feed/<encoded feed>`, which starts
 working once the feed is indexed there — submit it once at
 <https://podcastaddict.com/submit> (indexing can take up to 24 hours).
 
+The landing page has an on-page player as well: browse either show by season,
+search the Arabic titles, and listen in the sticky player without subscribing.
+It streams from the same per-series release assets, so no audio is stored in
+the repository or on GitHub Pages. Playback position and speed are remembered
+in the browser, and the playing episode is mirrored in the URL as
+`#ep-<video-id>` so a link can be shared.
+
 To listen without a directory, paste a feed URL into any app that supports
 "Add by URL".
 
 ```bash
-python3 podcast/build_feed.py        # regenerate docs/feed.xml and the landing page
-python3 podcast/validate_feed.py     # tags, sizes, GUIDs, titles; --urls checks every link
+python3 podcast/build_feed.py        # regenerate both feeds and the player page
+python3 podcast/validate_feed.py     # tags, sizes, GUIDs, titles, player rows; --urls checks links
 python3 podcast/publish_podcast.py --dry-run   # what still needs uploading
 python3 podcast/publish_podcast.py   # resumable: skips assets already present
 swift podcast/make_covers.swift      # redraw both 3000x3000 covers
