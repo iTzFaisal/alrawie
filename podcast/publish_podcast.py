@@ -164,7 +164,8 @@ def main() -> int:
                     if not args.replace:
                         print(f"  size mismatch, skipping {episode.asset} ({size} != {episode.size})")
                         continue
-                    gh("release", "delete-asset", tag, episode.asset, "--repo", bf.REPO, "--yes")
+                    gh("release", "delete-asset", tag, "--repo", bf.REPO,
+                       "--yes", "--", episode.asset)
                     replaced += 1
                 missing.append(episode)
 

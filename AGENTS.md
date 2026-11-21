@@ -11,7 +11,7 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
 - `python3 verify.py` checks the local media archive; it uses the standard
   library only and needs no venv or installed packages.
 - Expected output for the complete local archive:
-  `downloaded: 207/207`, `size: 1.94 GB`, `runtime covered: 33.3 hours`,
+  `downloaded: 207/207`, `size: 1.86 GB`, `source runtime covered: 33.3 hours`,
   `supplements: 4/4 (36 MB)`.
 - `verify.py` writes `catalog/download_report.csv` (gitignored).
 - `python3 podcast/validate_feed.py` checks the generated feeds and landing page:
@@ -34,14 +34,22 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
 - `python3 make_zips.py` — builds `dist/release/<series>.zip` for every folder
   under `audios/`, plus `SHA256SUMS.txt` and `summary.tsv`. Archives are stored
   (no deflate) and rebuilt only when a source file is newer (use `--force`).
-- `./release.sh` — builds the zips, creates the draft GitHub release
-  `archive-2026-11-15` if needed, uploads missing assets smallest-first, and
-  verifies remote sizes. `./release.sh --publish` flips the draft to public.
-  Needs an authenticated `gh`; re-running is safe and resumable.
+- `./release.sh` — builds the zips, reuses or creates the GitHub release
+  `archive-2026-11-15`, uploads assets whose SHA-256 differs from the remote
+  digest (smallest first), and verifies remote sizes and digests. The tag can
+  be overridden with `TAG=...`. `./release.sh --publish` flips a draft to
+  public. Needs an authenticated `gh`; re-running is safe and resumable.
+- `python3 podcast/trim_silence.py` — applies the cut points in
+  `catalog/trailing_silence.csv` to `audios/` with a stream copy, backing up
+  the originals under `dist/audio-originals/` first and recording the applied
+  duration, size and SHA-256 in the report. Dry run by default; `--apply`
+  writes. Re-running is idempotent.
 - `python3 podcast/build_feed.py` — regenerates both feeds and `docs/index.html`
-  from the manifests, the audio files, and the committed covers. The page
-  includes the on-page player: season lists, title search, deep links, and the
-  sticky audio bar. Deterministic; safe to re-run.
+  from the manifests, the audio files, and the committed covers. Episode
+  durations for trimmed files come from `catalog/trailing_silence.csv`; the
+  catalog keeps the padded source durations. The page includes the on-page
+  player: season lists, title search, deep links, and the sticky audio bar.
+  Deterministic; safe to re-run.
 - `python3 podcast/publish_podcast.py` — creates one `audio-<slug>` release per
   series and uploads each episode as `<video-id>.m4a`. Skips assets already
   present with the right size, so it resumes after failures. `--dry-run` first.
@@ -98,11 +106,15 @@ yt-dlp sidecars are gitignored, so a fresh clone legitimately has no audio.
   supplements only from `audios/مكملات/`.
 - `convert_to_audio.py` scans only top-level `audios/*.mp4`, not series
   subfolders. `--delete-video` removes source MP4s after a duration check.
-- Trailing silence is by design, not a defect: short uploads are padded to a
-  3-minute minimum, and the channel owner confirmed it. 62 files end with 30 s
-  or more of silence (16 of them are more than half silent), and 18 of those
-  also break off early with a ~1.3 s fragment near 1:46. `k7g61lkLMUw` is one
-  of them; do not re-download or "repair" these files.
+- Trailing silence was original padding, not a defect: short uploads were
+  padded to a 3-minute minimum, and the channel owner confirmed it. On
+  2026-11-21 the 76 files with 10 s or more of trailing digital silence were
+  trimmed with `podcast/trim_silence.py` (stream copy, one second kept).
+  Sixteen of them also had the ~1.2 s orphan fragment near 1:46, which was
+  removed too. `catalog/trailing_silence.csv` is the manifest and source of
+  truth for the cut points and applied durations; `podcast/build_feed.py` reads
+  it because the catalog still records the padded source durations. Do not
+  re-download these IDs: that restores the padding.
 - Paths contain Arabic text and the fullwidth `｜` character; quote paths in
   shell commands.
 - Release asset names are Latin slugs defined in `SLUGS` in `make_zips.py`.

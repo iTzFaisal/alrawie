@@ -69,7 +69,7 @@ def main() -> None:
 
     print(f"downloaded: {len(report)}/{len(rows)}")
     print(f"size: {total_bytes / 1e9:.2f} GB")
-    print(f"runtime covered: {total_seconds / 3600:.1f} hours")
+    print(f"source runtime covered: {total_seconds / 3600:.1f} hours")
     if missing:
         print(f"\nmissing: {len(missing)}")
         for vid, title in missing[:10]:

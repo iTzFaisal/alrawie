@@ -199,11 +199,32 @@ def read_titles() -> dict[str, tuple[str, str]]:
     return titles
 
 
+def read_trim_durations() -> dict[str, int]:
+    """video_id -> actual duration after trailing silence was cropped.
+
+    The catalog keeps the duration published by the source. For the files that
+    were trimmed, ``catalog/trailing_silence.csv`` records the duration of the
+    file that is actually served, so the feed and the player agree with it.
+    """
+    durations: dict[str, int] = {}
+    path = CATALOG / "trailing_silence.csv"
+    if not path.exists():
+        return durations
+    with path.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            if row.get("trim") != "yes":
+                continue
+            value = row.get("applied_duration_s") or row.get("recommended_duration_s")
+            if value:
+                durations[row["video_id"]] = int(float(value) + 0.5)
+    return durations
+
+
 # --------------------------------------------------------------------------
 # assembling the shows
 
 
-def collect(rows, titles, files, series, season) -> list[Episode]:
+def collect(rows, titles, files, series, season, trims) -> list[Episode]:
     episodes: list[Episode] = []
     for video_id, row_series in rows:
         if row_series != series:
@@ -220,7 +241,7 @@ def collect(rows, titles, files, series, season) -> list[Episode]:
                 series=series,
                 season=season,
                 number=len(episodes) + 1,
-                duration=int(duration),
+                duration=trims.get(video_id, int(duration)),
                 size=path.stat().st_size,
                 path=path,
                 published=BASE_DATE,
@@ -247,6 +268,7 @@ def collect(rows, titles, files, series, season) -> list[Episode]:
 def build_shows() -> list[Show]:
     files = index_audio()
     titles = read_titles()
+    trims = read_trim_durations()
     rows = read_rows()
 
     main = Show(
@@ -293,7 +315,7 @@ def build_shows() -> list[Show]:
 
     for show in (main, cassette_show):
         for index, (series, slug) in enumerate(show.seasons, start=1):
-            show.episodes.extend(collect(rows, titles, files, series, index))
+            show.episodes.extend(collect(rows, titles, files, series, index, trims))
 
     for show in (main, cassette_show):
         if not show.episodes:

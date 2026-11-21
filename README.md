@@ -31,8 +31,8 @@ Expected verification output:
 
 ```text
 downloaded: 207/207
-size: 1.94 GB
-runtime covered: 33.3 hours
+size: 1.86 GB
+source runtime covered: 33.3 hours
 supplements: 4/4 (36 MB)
 ```
 
@@ -48,7 +48,7 @@ All audio is published on the
 **[Releases page](https://github.com/iTzFaisal/alrawie/releases/latest)** — no
 scripts needed, each series is a ready-to-extract zip. The current snapshot is
 [`archive-2026-11-15`](https://github.com/iTzFaisal/alrawie/releases/tag/archive-2026-11-15):
-11 archives with 211 files (1.98 GB) plus `SHA256SUMS.txt`.
+11 archives with 211 files (1.89 GB) plus `SHA256SUMS.txt`.
 
 ```bash
 gh release download archive-2026-11-15 --repo iTzFaisal/alrawie
@@ -69,7 +69,7 @@ URL per episode and cannot open a zip.
 
 | Show | Episodes | Runtime | Subscribe |
 | --- | ---: | ---: | --- |
-| أرشيف الراوي فواز الغسلان | 199 | 19.5 h | <https://itzfaisal.github.io/alrawie/feed.xml> |
+| أرشيف الراوي فواز الغسلان | 199 | 18.1 h | <https://itzfaisal.github.io/alrawie/feed.xml> |
 | الكاسيتات الكاملة | 12 | 14.5 h | <https://itzfaisal.github.io/alrawie/kasayet/feed.xml> |
 
 - **Main show** — the 195 individual episodes plus the 4 gap-fillers, grouped
@@ -122,9 +122,12 @@ subscriber, so treat those names as frozen.
 
 | Item                   |   Count |        Size |                 Runtime |
 | ---------------------- | ------: | ----------: | ----------------------: |
-| Main channel uploads   |     207 |     1.94 GB |                  33.3 h |
+| Main channel uploads   |     207 |     1.86 GB |                  31.9 h |
 | Gap-filler supplements |       4 |       36 MB |                   0.6 h |
-| **Total**              | **211** | **1.98 GB** | **33.9 h actual audio** |
+| **Total**              | **211** | **1.89 GB** | **32.5 h actual audio** |
+
+The catalog still records the source durations (33.9 h); the difference is the
+1.4 h of trailing silence removed on 2026-11-21.
 
 - **207/207** mirror-channel uploads whose titles name فواز الغسلان.
 - 195 individual episodes and 12 full-cassette uploads.
@@ -324,18 +327,26 @@ from other channels.
 
 ## Trailing silence
 
-Short recordings are padded with digital silence to a **3-minute minimum**
+Short recordings were padded with digital silence to a **3-minute minimum**
 before upload. The channel owner confirmed this is by design, not a fault, so
-a clip can run 3:02 while only half of it carries sound. Eighteen of these
-files also break off early: a brief (~1.3 s) fragment near **1:46**, then
+a clip could run 3:02 while only half of it carried sound. Sixteen of these
+files also broke off early: a brief (~1.2 s) fragment near **1:46**, then
 silence to the end.
 
-`k7g61lkLMUw` (3:02) is one of them: its sound stops at about **1:13**, with the
-usual fragment near 1:46.
+On **2026-11-21** the 76 files with at least 10 seconds of trailing silence
+were trimmed with a stream copy (no re-encode), keeping one second of tail and
+removing the orphan fragment from the 16 affected files. That removed about
+1.4 hours in total and rebuilt the six affected zips. The catalog keeps the
+source durations; `catalog/trailing_silence.csv` records the original silence,
+the cut point and the applied duration for every file.
 
-This is **not** a corrupted local download. Re-downloading several affected IDs
-from YouTube produces byte-identical files. Every file is kept exactly as
-published. Do not re-download or "repair" them.
+`k7g61lkLMUw` is one of them: its sound stopped at about **1:13**, and the
+file is now 1:14 instead of 3:02.
+
+This is **not** a corrupted local download. Re-downloading the affected IDs
+from YouTube still produces the padded originals, so do not re-download or
+"repair" them: that would restore the silence. The podcast feeds and the
+archive zips now serve the trimmed files.
 
 ## Important limits
 
